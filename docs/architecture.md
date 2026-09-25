@@ -37,7 +37,8 @@ be useful to nobody.
 - **Verification** rows carry the command that was run, what it reported, and
   the commit it ran at.
 - **History** is append-only. Every field change writes a row; nothing updates
-  or deletes one.
+  or deletes one. A rule's every recorded wording is kept the same way, in
+  `rule_variants`.
 - **Missing wording is missing, and a summary is not a rule.** Rules 11–24 are
   recorded with empty text and `SOURCE_MISSING` because their wording could not
   be recovered and inventing it would be worse than the gap. Rules whose text is

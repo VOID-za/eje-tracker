@@ -21,8 +21,28 @@ const getRule = async (id, sql = db()) => {
 /** The fields a rule carries, and which are worth a history entry. */
 const RULE_FIELDS = [
   'text', 'category', 'status', 'note', 'source', 'source_ref', 'ordinal',
-  'wording_authority', 'verified_at', 'verified_by', 'variant_wording', 'variant_source',
+  'wording_authority', 'verified_at', 'verified_by',
 ];
+
+/**
+ * The other wordings a rule has had, or has.
+ *
+ * APPEND-ONLY. A wording the project was once given stays on record even after
+ * a better one arrives: which words the project was bound by, and when, is part
+ * of its history. Nothing here is ever updated or deleted.
+ */
+const recordRuleVariant = async (ruleId, variant, sql = db()) => {
+  if (!variant?.text) return;
+  await sql`INSERT INTO rule_variants (rule_id, text, source, kind)
+            VALUES (${ruleId}, ${variant.text}, ${variant.source ?? ''}, ${variant.kind ?? 'HISTORICAL'})
+            ON CONFLICT (rule_id, text) DO NOTHING`;
+};
+
+export const variantsFor = async (ruleId, sql = db()) =>
+  sql`SELECT * FROM rule_variants WHERE rule_id = ${ruleId} ORDER BY id`;
+
+export const allRuleVariants = async (sql = db()) =>
+  sql`SELECT * FROM rule_variants ORDER BY rule_id, id`;
 
 /**
  * Upserts a rule, VERBATIM.
@@ -30,7 +50,8 @@ const RULE_FIELDS = [
  * A rule whose text has been "tidied" is a different rule, so the text is
  * stored exactly as the authoritative source states it and a change to it is
  * recorded in history rather than applied silently — including the text it
- * replaced, which is kept in the history entry and in `variant_wording`.
+ * replaced, which is kept both in the history entry and as a row in
+ * `rule_variants`, so a wording cannot be lost by an import.
  */
 export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
   const existing = await getRule(rule.id, sql);
@@ -47,9 +68,8 @@ export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
       wording_authority: rule.wording_authority ?? 'RENDERING',
       verified_at: rule.verified_at ?? null,
       verified_by: rule.verified_by ?? '',
-      variant_wording: rule.variant_wording ?? '',
-      variant_source: rule.variant_source ?? '',
     })}`;
+    for (const variant of rule.variants ?? []) await recordRuleVariant(rule.id, variant, sql);
     await recordHistory(
       { entityType: 'rule', entityId: rule.id, actor, kind: 'created',
         summary: `Recorded as ${rule.status ?? 'ACTIVE'}`, detail: rule.source_ref ?? '' },
@@ -70,6 +90,13 @@ export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
     patch[field] = next;
     changed.push(field);
   }
+  // A wording that is being replaced becomes a variant, so the rule it used to
+  // be is never lost — the history entry alone would make it hard to find.
+  if (changed.includes('text') && existing.text.length > 0) {
+    await recordRuleVariant(rule.id, { text: existing.text, source: existing.source, kind: 'HISTORICAL' }, sql);
+  }
+  for (const variant of rule.variants ?? []) await recordRuleVariant(rule.id, variant, sql);
+
   if (changed.length === 0) return { created: false, changed };
   patch.updated_at = new Date();
   await sql`UPDATE rules SET ${sql(patch)} WHERE id = ${rule.id}`;

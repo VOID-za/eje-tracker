@@ -31,7 +31,7 @@
       "kind": "Requirement",
       "title": "The Rules model",
       "status": "IN_PROGRESS",
-      "description": "Rules are first-class constraints in their own table, never tasks: they have no DONE state and nothing in the tracker can close one. Each carries its number, its wording, its status, how authoritative that wording is, its source, its last verified state and its full history. Rules 25, 26 and 27 now hold the project owner's own words, supplied at Phase 3A, with the restatement they replaced kept in history. Rules 1-10 are in force but hold a restatement, pending confirmation (TRK-BD-02). Rules 11-24 remain unrecovered after an exhaustive Phase 3A search and are recorded as an explicit gap (TRK-BD-01).",
+      "description": "Rules are first-class constraints in their own table, never tasks: no DONE state, and nothing in the tracker can close one. Each carries its number where it has one, its wording, how authoritative that wording is, its source, its last verified state, every other wording ever recorded for it, and its full history. Rules 25-27 hold the owner's own words (27 corrected at Phase 3B, one word, with the earlier version kept). Rules 1-10 are in force with three wordings on record and none chosen (TRK-BD-02). Rules 11-24 remain unrecovered after two exhaustive searches; fifteen unnumbered standing rules were recovered verbatim instead and are in force (PRIN-01…PRIN-14, STAND-01), with the question of whether they ARE 11-24 put to the owner (TRK-BD-01).",
       "group_path": "TRACKER/Phase 2",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, §38.3",
@@ -312,22 +312,57 @@
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
       "source_ref": "preamble",
       "delivery": "NOT_STARTED"
+    },
+    {
+      "id": "TRK-27",
+      "kind": "Requirement",
+      "title": "Fifteen standing rules recovered verbatim from the project conversation",
+      "status": "DONE",
+      "description": "The founding instruction's fourteen ARCHITECTURAL PRINCIPLES and the CR-12 instruction's MOST IMPORTANT RULE, recorded in the owner's own words with their exact source. They are in force as standing rules; their number, if they have one, is unproven and was not assigned.",
+      "group_path": "TRACKER/Phase 3B",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3B\", 25 September 2026",
+      "source_ref": "§1",
+      "delivery": "LOCAL",
+      "priority": "HIGH"
+    },
+    {
+      "id": "TRK-28",
+      "kind": "Database",
+      "title": "A rule keeps every wording it has ever been given",
+      "status": "DONE",
+      "description": "Migration 0002 replaces the single variant column pair with an append-only rule_variants table, carrying the existing variants across before dropping the columns. Replacing a rule's text now files the old text as a variant automatically, so a wording cannot be lost by an import.",
+      "group_path": "TRACKER/Phase 3B",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3B\", 25 September 2026",
+      "source_ref": "§2, §21",
+      "delivery": "LOCAL",
+      "priority": "HIGH"
+    },
+    {
+      "id": "TRK-29",
+      "kind": "Security",
+      "title": "Rule 27 corrected to the wording supplied at Phase 3B",
+      "status": "DONE",
+      "description": "Phase 3B supplied rule 27 twice, both times reading \"accomidate\"; Phase 3A had \"accommodate\". The later, doubly-stated wording is now the rule text and the earlier one is kept as a variant. Rules 25 and 26 were re-stated character for character unchanged.",
+      "group_path": "TRACKER/Phase 3B",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3B\", 25 September 2026",
+      "source_ref": "§3, §27",
+      "delivery": "LOCAL"
     }
   ],
   "decisions": [
     {
       "id": "TRK-BD-01",
       "kind": "Decision",
-      "title": "What is the authoritative wording of project rules 11-24?",
+      "title": "Are the recovered founding principles the missing rules 11-24?",
       "status": "DECISION_REQUIRED",
-      "description": "The project owner's instruction states that rules 11-24 already exist in the established EJE project rules and must be recovered from the authoritative project context or source rather than guessed, rewritten or invented. They are not in the EJE repository, not in docs/SCOPE.md, and not in any source available to the tracker. Fourteen rules are therefore recorded with empty text and the status SOURCE_MISSING, and counted on the dashboard, until the wording is supplied.",
+      "description": "Searched twice — Phase 3A and again at Phase 3B, the second time separating the project owner's own messages from machine-written conversation summaries so that no summary could be mistaken for the owner's words. Searched: this repository and its full history; the EJE working tree, every blob in all 91 of its commits, and every commit message; docs/SCOPE.md and every other EJE document ever committed; and all 124 owner-written messages including every pasted instruction and queued command.\n\nNO WORDING NUMBERED 11-24 EXISTS IN ANY OF THEM.\n\nWhat the second search DID recover, verbatim and in the owner's own words, is fifteen standing rules that carry no number: the fourteen ARCHITECTURAL PRINCIPLES of the project's founding instruction (PRIN-01 to PRIN-14) and the MOST IMPORTANT RULE of the CR-12 instruction (STAND-01). All fifteen are now recorded as first-class rules and are in force.\n\nThere are exactly fourteen missing numbers and exactly fourteen architectural principles. That is an observation. It is NOT a proof: the principles are numbered 1-14 in their own source and nothing links them to the 11-24 range. The tracker will not renumber a rule on a coincidence, so rules 11-24 stay SOURCE_MISSING until the owner says one way or the other.",
       "group_path": "TRACKER/Phase 2",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7",
       "delivery": "NOT_STARTED",
       "priority": "HIGH",
-      "question": "What is the authoritative wording of EJE project rules 11-24?",
-      "options": "(a) Supply the wording from the authoritative project source, and re-import.\n(b) Confirm that no such rules exist, and renumber the series deliberately.\n(c) Write them afresh as a new, dated set of rules — which would be new rules, not a recovery.",
+      "question": "Are the fourteen founding ARCHITECTURAL PRINCIPLES (PRIN-01 to PRIN-14) the missing rules 11-24?",
+      "options": "(a) Yes — map PRIN-01…PRIN-14 onto rules 11…24 in that order. The tracker would renumber them, keep every existing record, and write the change into each rule's history.\n(b) Yes, but in a different order or a different mapping — say which principle is which rule number.\n(c) No — rules 11-24 are something else. Supply the wording and it is imported verbatim.\n(d) No — rules 11-24 never existed as distinct rules, and the numbering should close up. That is a documented decision, not a recovery.",
       "blocks": "TRK-03"
     },
     {
@@ -335,14 +370,14 @@
       "kind": "Decision",
       "title": "Is the recorded wording of rules 1-10 the authoritative wording?",
       "status": "DECISION_REQUIRED",
-      "description": "Two versions of rules 1-10 exist, both written by the project owner on 25 September 2026, and they differ. The tracker holds the first and keeps the second beside it rather than choosing.\n\nVersion A, which the tracker records, comes from the Phase 2 instruction §7 and is introduced as \"The established rules include:\" — wording such as \"Never deploy to the VPS unless deployment has explicitly been requested/approved.\"\n\nVersion B comes from the BD-06 task preamble, headed IMPORTANT PROJECT RULES — wording such as \"Do NOT deploy anything to the VPS.\" Its rule 2 says \"in this task\", so it reads as a task-scoped restatement rather than the standing register.\n\nNeither is demonstrably the original. The Phase 2 §7 list also carried rules 25-27, and the authoritative wording of those three, supplied at Phase 3A, differs materially from it — which is direct evidence that §7 is a restatement of the register rather than the register itself. The rules are therefore in force with their wording marked RENDERING until the owner confirms it.",
+      "description": "THREE versions of rules 1-10 are now on record, all written by the project owner, none of them demonstrably the original:\n\nA. Phase 2 §7, introduced as \"The established rules include:\" — the text the tracker records.\nB. The BD-06 task preamble, \"IMPORTANT PROJECT RULES\" — whose rule 2 says \"in this task\".\nC. Phase 3B §4, \"The known wording currently recorded includes the following principles\" — which differs from what is in fact recorded, most visibly at rule 2 (\"Do not break existing functionality while implementing changes\" against A's \"Investigation/audit work must not silently modify application code, schema or data\").\n\nPhase 3B instructed that the recorded wording be preserved and not silently replaced, so A remains the recorded text and B and C are kept as variants against each rule. The rules are in force either way; it is their exact wording that is unsettled. Evidence that A is itself a restatement: A also carried rules 25-27, and the owner's authoritative wording for those three differs from A's version of them.",
       "group_path": "TRACKER/Phase 3A",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
       "source_ref": "§1",
       "delivery": "NOT_STARTED",
       "priority": "HIGH",
       "question": "Is the recorded wording of rules 1-10 the authoritative wording, or does the original exist elsewhere?",
-      "options": "(a) Confirm the recorded wording (Phase 2 §7) as authoritative, and mark rules 1-10 AUTHORITATIVE.\n(b) Supply the original wording from the authoritative project source, and re-import it verbatim.\n(c) Adopt the other recorded version (the BD-06 preamble) as authoritative instead.\n(d) Restate rules 1-10 afresh — which would be new rules with a new date, not a recovery.",
+      "options": "(a) Confirm the recorded wording (A) as authoritative.\n(b) Confirm the Phase 3B §4 wording (C) as authoritative — the tracker would record it as the rule text and keep A and B as variants.\n(c) Supply the original wording from the authoritative project source, and it is imported verbatim.\n(d) Restate rules 1-10 afresh — new rules with a new date, not a recovery.",
       "blocks": "TRK-03"
     }
   ]

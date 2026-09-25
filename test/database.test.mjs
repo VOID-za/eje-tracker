@@ -188,12 +188,13 @@ test('migration 0001 is additive, idempotent, and keeps every rule', options, as
   }
 });
 
-test('correcting a rule keeps the wording it replaced', options, async () => {
+test('correcting a rule keeps the wording it replaced, as a variant and in history', options, async () => {
   const { sql, close } = await freshDatabase();
+  const { variantsFor } = await import('../src/repo/project.mjs');
   try {
     await saveRule({
       id: 'RULE-25', ordinal: 25, text: 'The complete system must ALWAYS remain tablet friendly.',
-      wording_authority: 'RENDERING',
+      wording_authority: 'RENDERING', source: 'Phase 2 §7 (a restatement)',
     }, {}, sql);
     const result = await saveRule({
       id: 'RULE-25',
@@ -201,8 +202,6 @@ test('correcting a rule keeps the wording it replaced', options, async () => {
       wording_authority: 'AUTHORITATIVE',
       verified_by: 'Project owner (EJE)',
       verified_at: '2026-09-25',
-      variant_wording: 'The complete system must ALWAYS remain tablet friendly.',
-      variant_source: 'Phase 2 §7 (a restatement)',
     }, {}, sql);
     assert.ok(result.changed.includes('text'));
     assert.ok(result.changed.includes('wording_authority'));
@@ -210,10 +209,68 @@ test('correcting a rule keeps the wording it replaced', options, async () => {
     const [rule] = await sql`SELECT * FROM rules WHERE id = 'RULE-25'`;
     assert.equal(rule.text, 'The complete system should always but always stay Tablet friendly!!');
     assert.equal(rule.wording_authority, 'AUTHORITATIVE');
-    assert.equal(rule.variant_wording, 'The complete system must ALWAYS remain tablet friendly.');
+
+    // The replaced wording is filed automatically — a caller cannot lose it by
+    // forgetting to pass it.
+    const variants = await variantsFor('RULE-25', sql);
+    assert.equal(variants.length, 1);
+    assert.equal(variants[0].text, 'The complete system must ALWAYS remain tablet friendly.');
+    assert.equal(variants[0].kind, 'HISTORICAL');
 
     const history = await historyFor('rule', 'RULE-25', sql);
     assert.match(history.at(-1).detail, /Previous wording, kept: The complete system must ALWAYS/);
+  } finally {
+    await close();
+  }
+});
+
+test('a rule can hold several wordings at once, and never the same one twice', options, async () => {
+  const { sql, close } = await freshDatabase();
+  const { variantsFor } = await import('../src/repo/project.mjs');
+  try {
+    await saveRule({
+      id: 'RULE-02', ordinal: 2, text: 'Version A.',
+      variants: [
+        { text: 'Version B.', source: 'the BD-06 preamble', kind: 'HISTORICAL' },
+        { text: 'Version C.', source: 'Phase 3B §4', kind: 'ALTERNATE' },
+      ],
+    }, {}, sql);
+    // Importing the same rule again must not multiply its variants.
+    await saveRule({
+      id: 'RULE-02', text: 'Version A.',
+      variants: [
+        { text: 'Version B.', source: 'the BD-06 preamble', kind: 'HISTORICAL' },
+        { text: 'Version C.', source: 'Phase 3B §4', kind: 'ALTERNATE' },
+      ],
+    }, {}, sql);
+
+    const variants = await variantsFor('RULE-02', sql);
+    assert.equal(variants.length, 2);
+    assert.deepEqual(variants.map((variant) => variant.kind), ['HISTORICAL', 'ALTERNATE']);
+    assert.equal(variants.filter((variant) => variant.text === 'Version A.').length, 0,
+      'the current wording is not also filed as a variant');
+  } finally {
+    await close();
+  }
+});
+
+test('migration 0002 carries variants across before dropping the columns it replaces', options, async () => {
+  const { sql, close } = await freshDatabase();
+  try {
+    // 0002 has already run in freshDatabase; prove the old columns are gone and
+    // nothing reads them any more.
+    const columns = await sql`SELECT column_name FROM information_schema.columns
+                               WHERE table_name = 'rules'`;
+    const names = columns.map((row) => row.column_name);
+    assert.ok(!names.includes('variant_wording'), 'the replaced column is still there');
+    assert.ok(!names.includes('variant_source'), 'the replaced column is still there');
+    assert.ok(names.includes('wording_authority'));
+
+    await assert.rejects(
+      () => sql`INSERT INTO rule_variants (rule_id, text) VALUES ('nope', 'x')`,
+      /rule_variants_rule_id_fkey/,
+      'a variant may not belong to a rule that does not exist',
+    );
   } finally {
     await close();
   }
@@ -244,13 +301,25 @@ test('re-importing the rules changes nothing and records nothing', options, asyn
   const { sql, close } = await freshDatabase();
   const { importRules } = await import('../src/import/rules.mjs');
   try {
+    // Counted from the file rather than hard-coded, so adding a rule cannot
+    // quietly make this test meaningless.
+    const { rulesPath } = await import('../src/import/rules.mjs');
+    const { readFileSync } = await import('node:fs');
+    const expected = JSON.parse(readFileSync(rulesPath, 'utf8')).rules.length;
+
     const first = await importRules({ log: () => {}, sql });
-    assert.equal(first.created, 44);
+    assert.equal(first.created, expected);
     const second = await importRules({ log: () => {}, sql });
     assert.equal(second.created, 0);
     assert.equal(second.updated, 0);
     const history = await sql`SELECT count(*)::int AS n FROM history WHERE entity_type = 'rule'`;
-    assert.equal(history[0].n, 44, 'a repeat import wrote history nobody asked for');
+    assert.equal(history[0].n, expected, 'a repeat import wrote history nobody asked for');
+
+    // Nor may it multiply the variants.
+    const variants = await sql`SELECT count(*)::int AS n FROM rule_variants`;
+    await importRules({ log: () => {}, sql });
+    const again = await sql`SELECT count(*)::int AS n FROM rule_variants`;
+    assert.equal(again[0].n, variants[0].n, 'a repeat import duplicated recorded wordings');
   } finally {
     await close();
   }

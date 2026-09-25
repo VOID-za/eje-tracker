@@ -121,7 +121,8 @@ test("rules 25, 26 and 27 carry the owner's own words, character for character",
   assert.equal(
     rules['RULE-27'].text,
     'Security is very very important from the start. we want the best of the best security models. It ' +
-      'must always accommodate the newest and best security models. System must be hardened. Have the ' +
+      // "accomidate", as the owner wrote it at Phase 3B — twice. Not corrected.
+      'must always accomidate the newest and best security models. System must be hardened. Have the ' +
       'best of the best practices. For development phase, never touch the demo users and the way we ' +
       'change users to view the different roles and permissions. once development is done, we will ' +
       'remove that and have actual login pages with prime security etc!!!!!',
@@ -130,14 +131,72 @@ test("rules 25, 26 and 27 carry the owner's own words, character for character",
     assert.equal(rules[id].wording_authority, 'AUTHORITATIVE');
     assert.equal(rules[id].status, 'ACTIVE');
     assert.ok(rules[id].verified_by.length > 0, `${id} records who verified it`);
-    assert.ok(rules[id].variant_wording.length > 0, `${id} keeps the wording it replaced`);
+    assert.ok(rules[id].variants.length > 0, `${id} keeps the wording it replaced`);
   }
 });
 
 test('the restatement rules 25-27 replaced is kept, not discarded', () => {
   const rules = Object.fromEntries(rulesFile().rules.map((rule) => [rule.id, rule]));
-  assert.match(rules['RULE-25'].variant_wording, /must ALWAYS remain tablet friendly/);
-  assert.notEqual(rules['RULE-25'].variant_wording, rules['RULE-25'].text);
+  const wordings = rules['RULE-25'].variants.map((variant) => variant.text);
+  assert.ok(wordings.some((text) => /must ALWAYS remain tablet friendly/.test(text)));
+  assert.ok(!wordings.includes(rules['RULE-25'].text), 'the current wording is not also a variant');
+});
+
+test("rule 27 carries the Phase 3B wording, and the Phase 3A one it replaced", () => {
+  const rule = rulesFile().rules.find((entry) => entry.id === 'RULE-27');
+  // Supplied twice in Phase 3B, both times reading "accomidate". Not corrected
+  // to "accommodate": the tracker records what the owner wrote.
+  assert.match(rule.text, /It must always accomidate the newest and best security models\./);
+  assert.ok(!/accommodate/.test(rule.text), 'the owner\'s spelling was silently corrected');
+  assert.ok(
+    rule.variants.some((variant) => /accommodate/.test(variant.text)),
+    'the Phase 3A wording was discarded instead of kept',
+  );
+  assert.equal(rule.wording_authority, 'AUTHORITATIVE');
+});
+
+test('rules 1-10 keep every wording ever recorded for them, and choose none', () => {
+  const rules = rulesFile().rules;
+  for (let number = 1; number <= 10; number += 1) {
+    const rule = rules.find((entry) => entry.id === `RULE-${String(number).padStart(2, '0')}`);
+    assert.ok(rule.variants.length >= 1, `RULE-${number} lost a recorded wording`);
+    assert.equal(rule.wording_authority, 'RENDERING', 'none of the three versions may be declared the original');
+    const texts = new Set([rule.text, ...rule.variants.map((variant) => variant.text)]);
+    assert.equal(texts.size, rule.variants.length + 1, `RULE-${number} records the same wording twice`);
+  }
+});
+
+test('the founding architectural principles are recovered verbatim, and not renumbered', () => {
+  const rules = rulesFile().rules;
+  const principles = rules.filter((rule) => /^PRIN-\d+$/.test(rule.id));
+  assert.equal(principles.length, 14, 'all fourteen founding principles must be recorded');
+  assert.equal(principles[0].text, 'Reliability over shortcuts.');
+  assert.equal(
+    principles[13].text,
+    'Do not build fake functionality that looks functional but is structurally impossible to replace later.',
+  );
+  for (const principle of principles) {
+    assert.equal(principle.wording_authority, 'AUTHORITATIVE', `${principle.id} is the owner's own wording`);
+    assert.match(principle.source, /founding instruction/);
+    assert.match(principle.note, /WHETHER THIS IS ONE OF RULES 11-24 IS NOT ESTABLISHED/);
+  }
+  // The coincidence of counts must NOT have been acted on.
+  for (let number = 11; number <= 24; number += 1) {
+    const rule = rules.find((entry) => entry.id === `RULE-${String(number).padStart(2, '0')}`);
+    assert.equal(rule.text, '', `RULE-${number} was filled in from a principle nobody authorised`);
+    assert.equal(rule.status, 'SOURCE_MISSING');
+  }
+});
+
+test("the owner's MOST IMPORTANT RULE is recorded verbatim", () => {
+  const rule = rulesFile().rules.find((entry) => entry.id === 'STAND-01');
+  assert.match(rule.text, /^DO NOT BREAK ANYTHING THAT ALREADY WORKS\./);
+  assert.equal(rule.wording_authority, 'AUTHORITATIVE');
+});
+
+test('no rule number is recorded twice, and every rule has exactly one record', () => {
+  const ids = rulesFile().rules.map((rule) => rule.id);
+  assert.equal(new Set(ids).size, ids.length, 'a rule id appears more than once');
 });
 
 test('rules 11-24 have no text, no invented wording and no false authority', () => {
@@ -147,7 +206,7 @@ test('rules 11-24 have no text, no invented wording and no false authority', () 
     assert.equal(rule.text, '', `RULE-${number} has text that nobody authorised`);
     assert.equal(rule.status, 'SOURCE_MISSING');
     assert.equal(rule.wording_authority, 'MISSING');
-    assert.equal(rule.variant_wording, '', `RULE-${number} has a variant nobody authorised either`);
+    assert.deepEqual(rule.variants, [], `RULE-${number} has a variant nobody authorised either`);
     assert.match(rule.note, /Searched at Phase 3A/);
   }
 });
@@ -159,8 +218,11 @@ test('rules 1-10 bind, but do not claim a wording they cannot prove', () => {
     assert.equal(rule.status, 'ACTIVE', `RULE-${number} must stay in force`);
     assert.equal(rule.wording_authority, 'RENDERING');
     assert.ok(rule.text.length > 0);
-    assert.ok(rule.variant_wording.length > 0, `RULE-${number} keeps the other recorded version`);
-    assert.ok(rule.variant_source.includes('BD-06'), `RULE-${number} names where the variant came from`);
+    assert.ok(rule.variants.length > 0, `RULE-${number} keeps the other recorded version`);
+    assert.ok(
+      rule.variants.some((variant) => variant.source.includes('BD-06')),
+      `RULE-${number} names where the variant came from`,
+    );
   }
 });
 

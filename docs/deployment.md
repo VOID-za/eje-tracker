@@ -104,10 +104,11 @@ one place the database password exists on the machine.
 
 The tracker's whole purpose is to be the place the project's rules are read
 from, so a deployment that carries a known-bad rule register is worse than no
-deployment. After the import in step 8, `/rules` will show fourteen rules
-(11–24) with no text and ten (1–10) whose wording is a restatement awaiting
-confirmation. That is deliberate and is recorded as TRK-BD-01 and TRK-BD-02 —
-it is not something to fix on the server by typing wording in.
+deployment. After the import in step 8, `/rules` will show fourteen rules (11–24) with no
+text, ten (1–10) whose wording is a restatement awaiting confirmation, and
+fifteen recovered standing rules whose number is unknown. That is deliberate and
+is recorded as TRK-BD-01 and TRK-BD-02 — it is not something to fix on the
+server by typing wording in.
 
 ## 5. The schema
 
@@ -118,8 +119,11 @@ sudo -u eje-tracker env $(grep -v '^#' /etc/eje-tracker/tracker.env | xargs) npm
 
 Running it twice is a no-op — it prints `migrations   up to date`. Migrations
 are additive and are applied one transaction each: `0000_initial.sql` builds the
-schema, `0001_rule_verification.sql` adds the rule-provenance columns and is
-safe against a database that already has rules in it.
+schema, `0001_rule_verification.sql` adds the rule-provenance columns, and
+`0002_rule_variants.sql` moves every recorded variant into its own append-only
+table before dropping the two columns it replaces. All three are safe against a
+database that already holds rules, and running them twice prints
+`migrations   up to date`.
 
 ## 6. The first account
 
@@ -184,8 +188,9 @@ sudo -u postgres psql -l | grep -E 'eje_tracker|eje'  # two separate databases, 
 ```
 
 And in the browser, over the tunnel: sign in, then check that `/rules` lists
-rules 1–27, that 25–27 read in the owner's own words, and that 11–24 are shown
-as missing rather than filled in.
+rules 1–27, that 25–27 read in the owner's own words (rule 27 spelling
+included), that 11–24 are shown as missing rather than filled in, and that the
+recovered principles appear under "Recovered standing rules, number unknown".
 
 ## Backups
 

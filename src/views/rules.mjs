@@ -21,16 +21,20 @@ const AUTHORITY = {
   MISSING: ['no wording recovered from any source, and none invented', 'SOURCE_MISSING'],
 };
 
-export const rulesPage = ({ rules, historyByRule, related }) => {
+export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, related }) => {
   const numbered = rules.filter((rule) => /^RULE-\d+$/.test(rule.id));
   const directives = rules.filter((rule) => rule.id.startsWith('DIR-'));
-  const other = rules.filter((rule) => !numbered.includes(rule) && !directives.includes(rule));
+  const recovered = rules.filter((rule) => rule.id.startsWith('PRIN-') || rule.id.startsWith('STAND-'));
+  const other = rules.filter(
+    (rule) => !numbered.includes(rule) && !directives.includes(rule) && !recovered.includes(rule),
+  );
   const missing = numbered.filter((rule) => rule.wording_authority === 'MISSING');
   const rendering = numbered.filter((rule) => rule.wording_authority === 'RENDERING');
 
   const card = (rule) => {
     const [authorityText, authorityTag] = AUTHORITY[rule.wording_authority] ?? AUTHORITY.RENDERING;
     const history = historyByRule[rule.id] ?? [];
+    const variants = variantsByRule[rule.id] ?? [];
     return html`
       <div class="rule ${rule.wording_authority === 'MISSING' ? 'missing' : ''}" id="${rule.id}">
         <div class="n">
@@ -43,15 +47,21 @@ export const rulesPage = ({ rules, historyByRule, related }) => {
           ? paragraphs(rule.text)
           : html`<p class="muted"><em>No authoritative text recorded.</em></p>`}
         ${rule.note ? html`<p class="muted" style="font-size:0.85rem">${rule.note}</p>` : ''}
-        ${rule.variant_wording
+        ${variants.length > 0
           ? html`<details style="margin-top:0.4rem">
               <summary class="muted" style="font-size:0.82rem; cursor:pointer">
-                Another version of this rule is on record
+                ${variants.length} other version${variants.length === 1 ? '' : 's'} of this rule ${variants.length === 1 ? 'is' : 'are'} on record
               </summary>
-              <blockquote style="margin:0.5rem 0 0; padding-left:0.8rem; border-left:2px solid var(--line)">
-                ${paragraphs(rule.variant_wording)}
-                <div class="muted" style="font-size:0.78rem">${rule.variant_source}</div>
-              </blockquote>
+              ${variants.map(
+                (variant) => html`<blockquote
+                  style="margin:0.5rem 0 0; padding-left:0.8rem; border-left:2px solid var(--line)">
+                  ${paragraphs(variant.text)}
+                  <div class="muted" style="font-size:0.78rem">
+                    ${variant.kind === 'ALTERNATE' ? 'Another version recorded at the same time' : 'Superseded wording, kept'}
+                    · ${variant.source}
+                  </div>
+                </blockquote>`,
+              )}
             </details>`
           : ''}
         <div class="muted" style="font-size:0.78rem; margin-top:0.45rem">
@@ -123,6 +133,21 @@ export const rulesPage = ({ rules, historyByRule, related }) => {
 
     <h2>The numbered project rules (${numbered.length})</h2>
     <div class="panel">${numbered.map(card)}</div>
+
+    ${recovered.length > 0
+      ? html`<h2>Recovered standing rules, number unknown (${recovered.length})</h2>
+          <div class="panel">
+            <p class="muted" style="margin-top:0">
+              Rules stated by the project owner, in the owner's own words, that are in force but carry no
+              number the tracker can prove. Fourteen of them are the founding instruction's
+              <em>ARCHITECTURAL PRINCIPLES</em>, numbered 1–14 in their own source — and there are exactly
+              fourteen missing rule numbers, 11–24. That is an observation, not a proof, and nothing here has
+              been renumbered on the strength of it. The project owner is asked to confirm or deny the match in
+              <a href="/items/TRK-BD-01">TRK-BD-01</a>.
+            </p>
+            ${recovered.map(card)}
+          </div>`
+      : ''}
 
     ${other.length > 0
       ? html`<h2>Superseded and retired (${other.length})</h2>
