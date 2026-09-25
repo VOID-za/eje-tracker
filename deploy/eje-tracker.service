@@ -1,0 +1,54 @@
+# EJE Project Tracker — systemd unit.
+#
+# ITS OWN SERVICE, ITS OWN USER, ITS OWN EVERYTHING. It is not part of
+# eje.service, it is not started by the EJE deployment, and stopping it does
+# nothing whatever to the EJE application. Install it as
+# /etc/systemd/system/eje-tracker.service.
+
+[Unit]
+Description=EJE Project Tracker
+Documentation=https://github.com/VOID-za/eje-tracker
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=eje-tracker
+Group=eje-tracker
+WorkingDirectory=/srv/eje-tracker/app
+# The environment file holds the database URL and nothing that belongs in Git.
+EnvironmentFile=/etc/eje-tracker/tracker.env
+ExecStart=/usr/bin/node bin/tracker.mjs
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=eje-tracker
+
+# Hardening. The tracker reads one directory it does not own — the EJE checkout,
+# read-only, for the importer — and writes nothing outside its own tree.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+# It listens on loopback only; it never needs a privileged port.
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/srv/eje-tracker
+ReadOnlyPaths=/srv/eje/app
+
+[Install]
+WantedBy=multi-user.target

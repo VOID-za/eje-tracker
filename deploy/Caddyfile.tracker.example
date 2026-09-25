@@ -1,0 +1,42 @@
+# EJE Project Tracker — FUTURE public route. NOT INSTALLED, AND NOT TO BE
+# INSTALLED WITHOUT A DECISION.
+#
+# The tracker is reached over an SSH tunnel today. This file exists so that
+# publishing it later is a considered act with the configuration already
+# written, rather than something improvised.
+#
+# READ THIS FIRST: the EJE deployment process can overwrite the Caddyfile.
+# Adding the tracker to the EJE Caddyfile therefore risks losing it on the next
+# EJE deployment, and worse, risks an EJE deployment script becoming something
+# the tracker depends on. Put this in its own file and import it:
+#
+#     # /etc/caddy/Caddyfile
+#     import /etc/caddy/conf.d/*.caddy
+#
+#     # /etc/caddy/conf.d/eje-tracker.caddy  ← this file
+#
+# Before doing any of that, decide who may reach it. A project-control system
+# carries the whole shape of the project; publishing it to the internet with
+# only a password in front of it is a decision, not a default.
+
+tracker.example.invalid {
+	encode zstd gzip
+
+	# Defence in depth: the tracker authenticates every request itself, but a
+	# public route should not be the first place that is proved.
+	@notLocal not remote_ip private_ranges
+	# basic_auth @notLocal { ... }   ← generate with `caddy hash-password`
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Frame-Options "DENY"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
+
+	reverse_proxy 127.0.0.1:3100
+}
+
+# When this route goes live, REMOVE TRACKER_INSECURE_COOKIES from
+# /etc/eje-tracker/tracker.env so the session cookie is issued Secure again.
