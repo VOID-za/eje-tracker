@@ -1,0 +1,22 @@
+{
+  "name": "eje-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EJE Project Tracker \u2014 the project-control system for the EJE Job Card Management project. Isolated from the EJE application.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node bin/tracker.mjs",
+    "migrate": "node bin/migrate.mjs",
+    "import:scope": "node bin/import-scope.mjs",
+    "import:git": "node bin/import-git.mjs",
+    "user:add": "node bin/user-add.mjs",
+    "test": "node --test --test-concurrency=1 \"test/**/*.test.mjs\"",
+    "verify": "node --test --test-concurrency=1 \"test/**/*.test.mjs\""
+  },
+  "dependencies": {
+    "postgres": "^3.4.5"
+  }
+}

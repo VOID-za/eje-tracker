@@ -1,0 +1,416 @@
+{
+  "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+  "note": "Verbatim. Nothing in this file is paraphrased, tidied or summarised. Rules 11–24 are recorded with empty text and status SOURCE_MISSING because their authoritative wording could not be recovered; they must be supplied by the project owner.",
+  "rules": [
+    {
+      "id": "RULE-01",
+      "ordinal": 1,
+      "text": "Never deploy to the VPS unless deployment has explicitly been requested/approved.",
+      "category": "Deployment",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 1"
+    },
+    {
+      "id": "RULE-02",
+      "ordinal": 2,
+      "text": "Investigation/audit work must not silently modify application code, schema or data.",
+      "category": "Process",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 2"
+    },
+    {
+      "id": "RULE-03",
+      "ordinal": 3,
+      "text": "Never silently decide an unresolved business rule.",
+      "category": "Process",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 3"
+    },
+    {
+      "id": "RULE-04",
+      "ordinal": 4,
+      "text": "Never invent a workaround for a missing requirement.",
+      "category": "Process",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 4"
+    },
+    {
+      "id": "RULE-05",
+      "ordinal": 5,
+      "text": "Never remove working functionality merely to make a new feature easier.",
+      "category": "Feature protection",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 5"
+    },
+    {
+      "id": "RULE-06",
+      "ordinal": 6,
+      "text": "Never leave duplicate, dead, obsolete or superseded code behind.",
+      "category": "Clean code",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 6"
+    },
+    {
+      "id": "RULE-07",
+      "ordinal": 7,
+      "text": "Preserve the working system and unrelated functionality.",
+      "category": "Feature protection",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 7"
+    },
+    {
+      "id": "RULE-08",
+      "ordinal": 8,
+      "text": "docs/SCOPE.md is the authoritative requirements/scope record.",
+      "category": "Scope control",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 8"
+    },
+    {
+      "id": "RULE-09",
+      "ordinal": 9,
+      "text": "PostgreSQL, application, API, UI, seeds, documentation and tests must remain consistent.",
+      "category": "Consistency",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 9"
+    },
+    {
+      "id": "RULE-10",
+      "ordinal": 10,
+      "text": "Changing/replacing a feature means properly replacing the old implementation, not layering another implementation on top.",
+      "category": "Clean code",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 10"
+    },
+    {
+      "id": "RULE-11",
+      "ordinal": 11,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-12",
+      "ordinal": 12,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-13",
+      "ordinal": 13,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-14",
+      "ordinal": 14,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-15",
+      "ordinal": 15,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-16",
+      "ordinal": 16,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-17",
+      "ordinal": 17,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-18",
+      "ordinal": 18,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-19",
+      "ordinal": 19,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-20",
+      "ordinal": 20,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-21",
+      "ordinal": 21,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-22",
+      "ordinal": 22,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-23",
+      "ordinal": 23,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-24",
+      "ordinal": 24,
+      "text": "",
+      "category": "",
+      "status": "SOURCE_MISSING",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rules 11–24",
+      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+    },
+    {
+      "id": "RULE-25",
+      "ordinal": 25,
+      "text": "The complete system must ALWAYS remain tablet friendly.",
+      "category": "Tablet",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 25"
+    },
+    {
+      "id": "RULE-26",
+      "ordinal": 26,
+      "text": "The tracker must ALWAYS be followed and amended as development progresses.\n\nWhen a feature/task is:\n\n- implemented\n- tested\n- reviewed\n- approved\n\nit must immediately be marked DONE in the tracker.\n\nDo not leave completed work as OPEN merely because a later batch may contain related work.\n\nThis is specifically to prevent confusion and duplicate work.",
+      "category": "Process",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 26"
+    },
+    {
+      "id": "RULE-27",
+      "ordinal": 27,
+      "text": "Security is extremely important from the beginning.\n\nThe system must:\n\n- use current strong security practices\n- be hardened\n- follow best-practice security architecture\n- accommodate improved/new security practices as the project evolves\n- avoid knowingly introducing insecure shortcuts",
+      "category": "Security",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, rule 27"
+    },
+    {
+      "id": "DIR-00",
+      "ordinal": 100,
+      "text": "The tracker MUST NOT interfere with, modify, break, or otherwise affect the EJE application.\n\nThe EJE application is:\n\n    VOID-za/EJE-Managment\n\nThe tracker MUST be a completely separate project.\n\nSeparate:\n\n- Git repository\n- directory\n- database\n- database user\n- environment file\n- systemd service\n- application process\n- logs\n- configuration\n- migrations\n- backup strategy\n- deployment\n- HTTP port\n- authentication\n- source code\n\nThe tracker must NEVER:\n\n- import tracker code into EJE\n- modify EJE package.json\n- modify EJE tsconfig\n- modify EJE eslint configuration\n- modify EJE Next.js configuration\n- modify EJE database schema\n- modify EJE database data\n- modify EJE routes\n- modify EJE systemd service\n- modify EJE environment variables\n- modify EJE Caddy configuration automatically\n- modify EJE deployment scripts\n- write into the EJE repository\n- write into docs/SCOPE.md\n- execute EJE migrations\n- restart eje.service\n- alter EJE users\n- alter EJE demo users\n- alter EJE permissions\n\nThe tracker may READ EJE documentation such as:\n\n    docs/SCOPE.md\n\nbut must treat that information as READ-ONLY.",
+      "category": "EJE protection",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§0 ABSOLUTE EJE PROTECTION RULE"
+    },
+    {
+      "id": "DIR-08",
+      "ordinal": 101,
+      "text": "This is mandatory.\n\nWhenever functionality is changed, replaced or removed:\n\nDO NOT simply add the new implementation.\n\nFind and remove the old implementation where it is no longer required.\n\nThis applies to:\n\n- code\n- components\n- API handlers\n- domain rules\n- database logic\n- migrations\n- schemas\n- seeds\n- comments\n- documentation\n- tests\n- scripts\n- feature flags\n- dead branches\n- obsolete helpers\n- obsolete types\n- obsolete imports\n- obsolete CSS/UI\n- old workflow paths\n\nDo not leave:\n\n- dead code\n- duplicate implementations\n- unused files\n- unused functions\n- obsolete comments\n- contradictory documentation\n- stale tests\n- stale seeds\n- abandoned feature branches\n- unnecessary dependencies\n\nBUT:\n\nNever delete historical data structures that are intentionally required for audit/history compatibility.\n\nIf something appears obsolete but you cannot prove it is safe to remove:\n\nSTOP.\n\nRecord the issue in the tracker and investigate before deleting it.",
+      "category": "Clean code",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§8 CLEAN CODE / CLEAN SYSTEM RULE"
+    },
+    {
+      "id": "DIR-09",
+      "ordinal": 102,
+      "text": "Every implementation must preserve unrelated existing functionality.\n\nA change must not accidentally break:\n\n- existing pages\n- existing routes\n- existing workflows\n- permissions\n- customer data\n- machines\n- jobs\n- documents\n- PDFs\n- signatures\n- email/outbox\n- delivery\n- notifications\n- attachments\n- library\n- search\n- dashboards\n- PostgreSQL behaviour\n- seed/demo behaviour\n- tablet usability\n\nBefore marking anything DONE, verify affected and relevant existing functionality.",
+      "category": "Feature protection",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§9 NO FEATURE REGRESSIONS"
+    },
+    {
+      "id": "DIR-10",
+      "ordinal": 103,
+      "text": "The database must always remain aligned with the application.\n\nFor every meaningful data-model change:\n\nCheck:\n\n- PostgreSQL schema\n- migrations\n- constraints\n- indexes\n- foreign keys\n- nullable/non-nullable fields\n- enums/statuses\n- seeds\n- test fixtures\n- application types\n- API validation\n- UI forms\n- historical data compatibility\n- PostgreSQL tests\n\nDo not assume \"no migration required\" without verifying why.\n\nIf a migration is required, create and test it properly.\n\nIf no migration is required, record the reason.\n\nThe tracker database itself must follow the same standard.",
+      "category": "Consistency",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§10 DATABASE / DATA CONSISTENCY"
+    },
+    {
+      "id": "DIR-11",
+      "ordinal": 104,
+      "text": "A task is NOT DONE merely because the code compiles.\n\nWhere applicable, verify:\n\n- unit tests\n- application tests\n- PostgreSQL tests\n- API tests\n- role/permission tests\n- workflow tests\n- browser/e2e tests\n- smoke tests\n- build\n- lint\n- typecheck\n- route checks\n- tablet/viewport checks\n- security implications\n\nThe tracker must record verification evidence.",
+      "category": "Testing",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§11 TESTING / ACCEPTANCE"
+    },
+    {
+      "id": "DIR-12",
+      "ordinal": 105,
+      "text": "This applies to the ENTIRE EJE system.\n\nEvery new page, dialog, workflow, form and component must remain usable on tablets.\n\nDo not treat desktop as the only target.\n\nWhere appropriate verify:\n\n- touch targets\n- no horizontal overflow\n- readable text\n- usable forms\n- usable dialogs\n- usable signatures\n- usable tables\n- usable workflow controls\n- appropriate spacing\n- tablet viewport behaviour\n\nThe tracker itself must also be tablet-friendly.",
+      "category": "Tablet",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§12 TABLET-FIRST REQUIREMENT"
+    },
+    {
+      "id": "DIR-13",
+      "ordinal": 106,
+      "text": "docs/SCOPE.md remains the authoritative EJE scope document.\n\nThe tracker must NOT become a replacement for SCOPE.md.\n\nInstead:\n\nSCOPE.md\n=\nauthoritative product requirement record.\n\nTracker\n=\nlive project-control / implementation / status / evidence layer.\n\nThe tracker may import and display scope information.\n\nIt must never silently alter SCOPE.md.",
+      "category": "Scope control",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§13 SCOPE / REQUIREMENT CONTROL"
+    },
+    {
+      "id": "DIR-15",
+      "ordinal": 107,
+      "text": "The tracker must distinguish clearly between:\n\n- OPEN\n- PLANNED\n- IN PROGRESS\n- BLOCKED\n- IMPLEMENTED\n- TESTING\n- APPROVED\n- DONE\n- DEFERRED\n- CANCELLED\n\nDo NOT collapse \"implemented\" and \"done\".\n\nA task only becomes DONE after it has been tested and approved.",
+      "category": "Status model",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§15 STATUS MODEL"
+    },
+    {
+      "id": "DIR-16",
+      "ordinal": 108,
+      "text": "The tracker must distinguish:\n\n- NOT STARTED\n- LOCAL\n- COMMITTED\n- PUSHED\n- DEPLOYED\n\nNever treat PUSHED as DEPLOYED.\n\nThe live EJE build can provide deployment evidence.\n\nWhere practical, derive deployment state from:\n\n- commit hash\n- live /api/health build stamp\n- git ancestry\n\nDo not allow someone to manually claim something is deployed without evidence.",
+      "category": "Deployment",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§16 GIT / DEPLOYMENT STATUS"
+    },
+    {
+      "id": "DIR-28",
+      "ordinal": 109,
+      "text": "Design for future automation, but do NOT introduce dangerous automation now.\n\nFuture automation may eventually allow:\n\n- Claude to read tracker state automatically\n- Claude to update tracker after implementation\n- Git commits to update tracker\n- deployment health to update deployment status\n- ChatGPT to query tracker state\n- automatic detection of pushed-vs-deployed\n- automatic detection of changed scope\n\nBUT:\n\nNo automation may modify EJE production behaviour without explicit authorization.\n\nNo automatic deployment.\n\nNo automatic destructive action.\n\nNo automatic database mutation against EJE.",
+      "category": "Automation",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§28 AUTOMATION"
+    },
+    {
+      "id": "DIR-29",
+      "ordinal": 110,
+      "text": "Security applies to the tracker itself.\n\nUse strong current security practices from the beginning.\n\nAt minimum:\n\n- authenticated access\n- secure password hashing\n- session security\n- CSRF protection where applicable\n- input validation\n- authorization\n- secure cookies\n- security headers\n- no plaintext passwords\n- no secrets in Git\n- no credentials in logs\n- least privilege\n- database user separation\n- parameterized SQL\n- safe error handling\n- audit logging\n\nUse current best-practice approaches rather than deliberately choosing outdated patterns.",
+      "category": "Security",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§29 SECURITY"
+    },
+    {
+      "id": "DIR-33",
+      "ordinal": 111,
+      "text": "Before declaring the tracker implementation complete:\n\nRun its own:\n\n- tests\n- typecheck if applicable\n- lint if applicable\n- build\n- database tests\n- security checks\n- API tests\n- browser tests where applicable\n\nAlso verify that the EJE repository remains completely untouched.",
+      "category": "Testing",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§33 QUALITY GATE"
+    },
+    {
+      "id": "DIR-34",
+      "ordinal": 112,
+      "text": "Before finishing any tracker implementation batch:\n\nCheck the tracker repository for:\n\n- unused files\n- unused dependencies\n- dead code\n- duplicate implementations\n- stale comments\n- stale documentation\n- temporary files\n- debug code\n- secrets\n- generated junk\n- unnecessary build artifacts\n\nDo not leave scratch files behind.",
+      "category": "Clean code",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§34 CLEANUP VERIFICATION"
+    },
+    {
+      "id": "DIR-35",
+      "ordinal": 113,
+      "text": "The tracker must have its own Git repository.\n\nEvery meaningful batch should have:\n\n- implementation commit\n- documentation/scope commit where appropriate\n- clean working tree\n- pushed branch/commit\n\nNever claim completion with uncommitted implementation changes.",
+      "category": "Process",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§35 GIT"
+    },
+    {
+      "id": "DIR-36",
+      "ordinal": 114,
+      "text": "If something is ambiguous:\n\nSTOP.\n\nDo not decide it yourself.\n\nCreate/update a decision item and ask.\n\nIf something appears to contradict an existing rule:\n\nSTOP.\n\nDo not silently reconcile it.\n\nIf removing something may affect history:\n\nSTOP and investigate.\n\nIf a requested change may break another feature:\n\nSTOP and investigate before implementation.",
+      "category": "Process",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§36 NO GUESSING / NO SILENT DECISIONS"
+    },
+    {
+      "id": "DIR-37",
+      "ordinal": 115,
+      "text": "The tracker must NEVER cause changes to the EJE application.\n\nThe tracker must also NEVER be allowed to become a dependency of the EJE application.\n\nEJE must continue to function normally if the tracker is:\n\n- offline\n- stopped\n- unavailable\n- being upgraded\n- being migrated\n- being backed up\n- completely removed\n\nThe EJE application must have ZERO runtime dependency on the tracker.",
+      "category": "Feature protection",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§37 ABSOLUTE FEATURE-PROTECTION RULE"
+    },
+    {
+      "id": "RULE-DEV-AUTH",
+      "ordinal": 28,
+      "text": "IMPORTANT DEVELOPMENT AUTHENTICATION RULE:\n\nDuring development, DO NOT change the existing demo users or the mechanism used to switch between roles/permissions.\n\nThe existing development/demo role mechanism is intentional and must remain available for testing.\n\nAfter development is complete, production authentication will be implemented properly and the development/demo mechanism will be removed/replaced as part of the production-security phase.",
+      "category": "Security",
+      "status": "ACTIVE",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+      "source_ref": "§7, IMPORTANT DEVELOPMENT AUTHENTICATION RULE"
+    }
+  ]
+}
