@@ -38,10 +38,12 @@ be useful to nobody.
   the commit it ran at.
 - **History** is append-only. Every field change writes a row; nothing updates
   or deletes one.
-- **Missing wording is missing.** Rules 11–24 are recorded with empty text and
-  the status `SOURCE_MISSING`, and counted on the dashboard, because the
-  authoritative wording could not be recovered and inventing it would be worse
-  than the gap.
+- **Missing wording is missing, and a summary is not a rule.** Rules 11–24 are
+  recorded with empty text and `SOURCE_MISSING` because their wording could not
+  be recovered and inventing it would be worse than the gap. Rules whose text is
+  a restatement rather than the owner's own words carry `wording_authority =
+  RENDERING`, so nobody mistakes a tidy summary for the constraint itself. See
+  [`rules.md`](rules.md).
 
 ## The stack, and why it is this small
 

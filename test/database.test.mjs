@@ -93,7 +93,7 @@ test('a rule is stored verbatim and a change to its text is recorded', options, 
     await saveRule({ id: 'RULE-01', text: 'Never deploy unless asked, ever.' }, {}, sql);
     const history = await historyFor('rule', 'RULE-01', sql);
     assert.equal(history.length, 2);
-    assert.match(history[1].detail, /Previous text kept in history: Never deploy unless asked\./);
+    assert.match(history[1].detail, /Previous wording, kept: Never deploy unless asked\./);
   } finally {
     await close();
   }
@@ -162,6 +162,95 @@ test('filters and search are applied by the database, not by the caller', option
     assert.equal((await listItems({ q: 'tablet' }, sql)).length, 1, 'search is case-insensitive');
     assert.equal((await listItems({ q: "'; DROP TABLE items; --" }, sql)).length, 0);
     assert.equal((await listItems({ sort: 'nonsense; DROP TABLE items' }, sql)).length, 3, 'sort is a whitelist');
+  } finally {
+    await close();
+  }
+});
+
+test('migration 0001 is additive, idempotent, and keeps every rule', options, async () => {
+  const { sql, close } = await freshDatabase();
+  try {
+    await saveRule({ id: 'RULE-01', ordinal: 1, text: 'Never deploy unless asked.' }, {}, sql);
+    // Re-running every migration must not disturb a row that already exists.
+    const { migrate } = await import('../src/db/migrate.mjs');
+    await migrate({ sql, log: () => {} });
+    const [rule] = await sql`SELECT * FROM rules WHERE id = 'RULE-01'`;
+    assert.equal(rule.text, 'Never deploy unless asked.');
+    assert.equal(rule.wording_authority, 'RENDERING', 'the default says the wording is unconfirmed');
+    assert.equal(rule.verified_at, null, 'nothing is verified until somebody verifies it');
+
+    await assert.rejects(
+      () => sql`UPDATE rules SET wording_authority = 'DEFINITELY' WHERE id = 'RULE-01'`,
+      /rules_wording_authority_known/,
+    );
+  } finally {
+    await close();
+  }
+});
+
+test('correcting a rule keeps the wording it replaced', options, async () => {
+  const { sql, close } = await freshDatabase();
+  try {
+    await saveRule({
+      id: 'RULE-25', ordinal: 25, text: 'The complete system must ALWAYS remain tablet friendly.',
+      wording_authority: 'RENDERING',
+    }, {}, sql);
+    const result = await saveRule({
+      id: 'RULE-25',
+      text: 'The complete system should always but always stay Tablet friendly!!',
+      wording_authority: 'AUTHORITATIVE',
+      verified_by: 'Project owner (EJE)',
+      verified_at: '2026-09-25',
+      variant_wording: 'The complete system must ALWAYS remain tablet friendly.',
+      variant_source: 'Phase 2 §7 (a restatement)',
+    }, {}, sql);
+    assert.ok(result.changed.includes('text'));
+    assert.ok(result.changed.includes('wording_authority'));
+
+    const [rule] = await sql`SELECT * FROM rules WHERE id = 'RULE-25'`;
+    assert.equal(rule.text, 'The complete system should always but always stay Tablet friendly!!');
+    assert.equal(rule.wording_authority, 'AUTHORITATIVE');
+    assert.equal(rule.variant_wording, 'The complete system must ALWAYS remain tablet friendly.');
+
+    const history = await historyFor('rule', 'RULE-25', sql);
+    assert.match(history.at(-1).detail, /Previous wording, kept: The complete system must ALWAYS/);
+  } finally {
+    await close();
+  }
+});
+
+test('a rule is never stored as a task', options, async () => {
+  const { sql, close } = await freshDatabase();
+  const { importRules } = await import('../src/import/rules.mjs');
+  const { importTrackerItems } = await import('../src/import/tracker-items.mjs');
+  try {
+    await importRules({ log: () => {}, sql });
+    await importTrackerItems({ log: () => {}, sql });
+
+    const asItems = await sql`SELECT id FROM items WHERE id LIKE 'RULE-%' OR id LIKE 'DIR-%'`;
+    assert.equal(asItems.length, 0, `a rule leaked into the task ledger: ${asItems.map((r) => r.id)}`);
+
+    const done = await sql`SELECT id FROM rules WHERE status IN ('DONE','APPROVED','IMPLEMENTED')`;
+    assert.equal(done.length, 0, 'a rule was marked as finished work');
+
+    const numbered = await sql`SELECT id FROM rules WHERE id ~ '^RULE-[0-9]+$' ORDER BY ordinal`;
+    assert.equal(numbered.length, 27, 'rules 1-27 must all be present');
+  } finally {
+    await close();
+  }
+});
+
+test('re-importing the rules changes nothing and records nothing', options, async () => {
+  const { sql, close } = await freshDatabase();
+  const { importRules } = await import('../src/import/rules.mjs');
+  try {
+    const first = await importRules({ log: () => {}, sql });
+    assert.equal(first.created, 44);
+    const second = await importRules({ log: () => {}, sql });
+    assert.equal(second.created, 0);
+    assert.equal(second.updated, 0);
+    const history = await sql`SELECT count(*)::int AS n FROM history WHERE entity_type = 'rule'`;
+    assert.equal(history[0].n, 44, 'a repeat import wrote history nobody asked for');
   } finally {
     await close();
   }

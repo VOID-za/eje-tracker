@@ -19,10 +19,12 @@ and is unaffected if it is stopped, upgraded or removed entirely.**
 - **PUSHED is not DEPLOYED.** Deployment is read from the live application's own
   `/api/health` build stamp and git ancestry, and the evidence is stored with
   it. Nobody can type "deployed" into this system.
-- **Nothing is invented.** Rules 11–24 of the project's rules could not be
-  recovered from any authoritative source, so they are recorded with empty text,
-  the status `SOURCE_MISSING`, and a count on the dashboard — until the project
-  owner supplies the wording.
+- **Nothing is invented.** Rules 11–24 could not be recovered from any source —
+  not this repository, not the EJE repository or any blob in its history, not
+  `docs/SCOPE.md`, not the project conversation — so they are recorded with empty
+  text, `SOURCE_MISSING`, and a count on the dashboard until the owner supplies
+  the wording. Rules whose text is somebody's restatement rather than the owner's
+  own words say so too, instead of passing as authoritative.
 - **Nothing is deleted.** History is append-only; an item that leaves
   `docs/SCOPE.md` is kept and marked, not removed.
 
@@ -52,6 +54,8 @@ pure tests run anywhere. They share one database, so the suite runs serially.
 ## Documentation
 
 - [`docs/architecture.md`](docs/architecture.md) — how it is built and why.
+- [`docs/rules.md`](docs/rules.md) — how the rules are held, what is
+  authoritative, and what is missing.
 - [`docs/import.md`](docs/import.md) — exactly what the importers do, including
   the three things they derive rather than transcribe.
 - [`docs/deployment.md`](docs/deployment.md) — the VPS runbook. Nothing in it
@@ -64,7 +68,7 @@ pure tests run anywhere. They share one database, so the suite runs serially.
 | `/` | What is actually true: done, built-but-not-accepted, blocked, not deployed, what is running in production |
 | `/items` | Everything, filterable and searchable |
 | `/items/:id` | One item: where it came from, what it relates to, its commits, its files, its verification, its whole history |
-| `/rules` | Every project rule, verbatim, and the ones whose wording is missing |
+| `/rules` | Every project rule, verbatim, with how authoritative its wording is, when it was last verified, and the ones whose wording is missing |
 | `/decisions` | What nobody has decided yet, with the question and the options kept |
 | `/releases` | Commits, releases, and where the code actually is |
 | `/verification` | What was run and what it said |

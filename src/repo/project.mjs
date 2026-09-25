@@ -18,12 +18,19 @@ const getRule = async (id, sql = db()) => {
   return row ?? null;
 };
 
+/** The fields a rule carries, and which are worth a history entry. */
+const RULE_FIELDS = [
+  'text', 'category', 'status', 'note', 'source', 'source_ref', 'ordinal',
+  'wording_authority', 'verified_at', 'verified_by', 'variant_wording', 'variant_source',
+];
+
 /**
  * Upserts a rule, VERBATIM.
  *
  * A rule whose text has been "tidied" is a different rule, so the text is
  * stored exactly as the authoritative source states it and a change to it is
- * recorded in history rather than applied silently.
+ * recorded in history rather than applied silently — including the text it
+ * replaced, which is kept in the history entry and in `variant_wording`.
  */
 export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
   const existing = await getRule(rule.id, sql);
@@ -37,6 +44,11 @@ export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
       note: rule.note ?? '',
       source: rule.source ?? '',
       source_ref: rule.source_ref ?? '',
+      wording_authority: rule.wording_authority ?? 'RENDERING',
+      verified_at: rule.verified_at ?? null,
+      verified_by: rule.verified_by ?? '',
+      variant_wording: rule.variant_wording ?? '',
+      variant_source: rule.variant_source ?? '',
     })}`;
     await recordHistory(
       { entityType: 'rule', entityId: rule.id, actor, kind: 'created',
@@ -47,10 +59,15 @@ export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
   }
   const changed = [];
   const patch = {};
-  for (const field of ['text', 'category', 'status', 'note', 'source', 'source_ref', 'ordinal']) {
+  for (const field of RULE_FIELDS) {
     if (!(field in rule)) continue;
-    if (String(existing[field] ?? '') === String(rule[field] ?? '')) continue;
-    patch[field] = rule[field] ?? null;
+    const before = existing[field] ?? null;
+    const next = rule[field] ?? null;
+    const same = before instanceof Date
+      ? new Date(next ?? 0).getTime() === before.getTime()
+      : String(before ?? '') === String(next ?? '');
+    if (same) continue;
+    patch[field] = next;
     changed.push(field);
   }
   if (changed.length === 0) return { created: false, changed };
@@ -59,7 +76,9 @@ export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
   await recordHistory(
     { entityType: 'rule', entityId: rule.id, actor, kind: 'field',
       summary: `Changed: ${changed.join(', ')}`,
-      detail: changed.includes('text') ? `Previous text kept in history: ${existing.text}` : '' },
+      detail: changed.includes('text')
+        ? `Previous wording, kept: ${existing.text.length > 0 ? existing.text : '(none recorded)'}`
+        : '' },
     sql,
   );
   return { created: false, changed };

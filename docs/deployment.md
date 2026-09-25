@@ -1,8 +1,14 @@
 # Deploying the tracker — runbook for a human
 
 **Nothing in this file has been run.** Claude has no shell access to the VPS and
-performed no deployment: this is the complete set of commands for a person to
-execute when they choose to. Every step says what it changes and how to undo it.
+performed no deployment, no installation and no change to any service: this is
+the complete set of commands for a person to execute when they choose to. Every
+step says what it changes and how to undo it.
+
+**Target:** VPS `srv2000625`. The tracker binds `127.0.0.1:3100`, which the
+project owner confirmed is free (`sudo ss -ltnp | grep ':3100'` returned
+nothing). Step 0 below re-checks it at the moment of deployment, because "free
+last week" is not "free now".
 
 The tracker is entirely separate from the EJE application. Nothing here touches
 `eje.service`, the EJE database, the EJE Caddyfile, EJE users or the EJE
@@ -12,6 +18,7 @@ tracker — if the tracker is stopped, removed or broken, EJE is unaffected.
 | | EJE application | EJE Project Tracker |
 |---|---|---|
 | Repository | `VOID-za/EJE-Managment` | `VOID-za/eje-tracker` |
+| Host | `srv2000625` | `srv2000625` (same machine, nothing shared) |
 | Directory | `/srv/eje/app` | `/srv/eje-tracker/app` |
 | Service | `eje.service` | `eje-tracker.service` |
 | Database | its own | `eje_tracker` |
@@ -24,14 +31,24 @@ tracker — if the tracker is stopped, removed or broken, EJE is unaffected.
 ## 0. Before anything: is port 3100 actually free?
 
 ```bash
-ss -ltnp | grep -E ':3100\b' || echo "3100 is free"
+sudo ss -ltnp | grep ':3100' || echo "3100 is free"
+sudo systemctl is-active eje.service          # must stay active throughout
 ```
+
+The owner has already run the first command and found nothing listening. Run it
+again anyway at deployment time.
 
 **If anything is listening on 3100, STOP.** Do not pick another port on the
 spot — report it, and the port becomes a decision with a tracker item of its
 own. The number appears in `tracker.env`, in the systemd unit's expectations
 and in the SSH tunnel command, and changing it in one place only is how a
 service ends up unreachable for a morning.
+
+**Before you start, know what this never touches.** Nothing in this runbook
+modifies `eje.service`, the EJE application files, the EJE PostgreSQL database,
+the EJE environment, the EJE Caddy configuration or the EJE deployment process.
+If a step here appears to require any of those, it is wrong — stop and report
+it.
 
 ## 1. A user and a directory for it
 
@@ -83,6 +100,15 @@ history -d "$(history 1)" 2>/dev/null || true
 The file is root-owned and group-readable by the service user only. It is the
 one place the database password exists on the machine.
 
+## 4a. Check the rules before going further
+
+The tracker's whole purpose is to be the place the project's rules are read
+from, so a deployment that carries a known-bad rule register is worse than no
+deployment. After the import in step 8, `/rules` will show fourteen rules
+(11–24) with no text and ten (1–10) whose wording is a restatement awaiting
+confirmation. That is deliberate and is recorded as TRK-BD-01 and TRK-BD-02 —
+it is not something to fix on the server by typing wording in.
+
 ## 5. The schema
 
 ```bash
@@ -90,7 +116,10 @@ cd /srv/eje-tracker/app
 sudo -u eje-tracker env $(grep -v '^#' /etc/eje-tracker/tracker.env | xargs) npm run migrate
 ```
 
-Running it twice is a no-op — it prints `migrations   up to date`.
+Running it twice is a no-op — it prints `migrations   up to date`. Migrations
+are additive and are applied one transaction each: `0000_initial.sql` builds the
+schema, `0001_rule_verification.sql` adds the rule-provenance columns and is
+safe against a database that already has rules in it.
 
 ## 6. The first account
 
@@ -150,7 +179,13 @@ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3100/           # 303 
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3100/api/items  # 401
 ss -ltnp | grep 3100                                  # 127.0.0.1:3100 only, never 0.0.0.0
 systemctl is-active eje.service                       # unchanged: the EJE app is untouched
+systemctl show eje.service -p ActiveEnterTimestamp    # unchanged since before this deployment
+sudo -u postgres psql -l | grep -E 'eje_tracker|eje'  # two separate databases, two separate owners
 ```
+
+And in the browser, over the tunnel: sign in, then check that `/rules` lists
+rules 1–27, that 25–27 read in the owner's own words, and that 11–24 are shown
+as missing rather than filled in.
 
 ## Backups
 

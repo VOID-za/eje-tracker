@@ -6,6 +6,7 @@ import { dirname, join } from 'node:path';
 import { parseScope, idsIn, hashesIn, plain } from '../src/import/markdown.mjs';
 import { readScope, readVerificationRuns } from '../src/import/scope.mjs';
 import { rulesPath } from '../src/import/rules.mjs';
+import * as statusModule from '../src/domain/model.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixture = readFileSync(join(here, 'fixtures', 'scope-sample.md'), 'utf8');
@@ -92,4 +93,93 @@ test('the rules that were recovered are stored verbatim', () => {
   );
   assert.equal(first.status, 'ACTIVE');
   assert.ok(first.source.length > 0, 'a rule without a source is a rumour');
+});
+
+/* ---------------------------------------------------------------- rules -- */
+
+const rulesFile = () => JSON.parse(readFileSync(rulesPath, 'utf8'));
+
+test('rules 1 to 27 all exist, exactly once each', () => {
+  const numbered = rulesFile().rules.filter((rule) => /^RULE-\d+$/.test(rule.id));
+  const numbers = numbered.map((rule) => Number(rule.id.slice(5)));
+  assert.deepEqual(numbers.sort((a, b) => a - b), Array.from({ length: 27 }, (_, i) => i + 1));
+  assert.equal(new Set(numbers).size, 27, 'a rule number appears twice');
+});
+
+test("rules 25, 26 and 27 carry the owner's own words, character for character", () => {
+  const rules = Object.fromEntries(rulesFile().rules.map((rule) => [rule.id, rule]));
+  assert.equal(
+    rules['RULE-25'].text,
+    'The complete system should always but always stay Tablet friendly!!',
+  );
+  assert.equal(
+    rules['RULE-26'].text,
+    'We must always but always follow and amend this tracker as we go. When i feature is finished and ' +
+      'tested and approved, then that task must be marked done on the tracker instantly. Otherwise ' +
+      'confusion and double work will become a problem.',
+  );
+  assert.equal(
+    rules['RULE-27'].text,
+    'Security is very very important from the start. we want the best of the best security models. It ' +
+      'must always accommodate the newest and best security models. System must be hardened. Have the ' +
+      'best of the best practices. For development phase, never touch the demo users and the way we ' +
+      'change users to view the different roles and permissions. once development is done, we will ' +
+      'remove that and have actual login pages with prime security etc!!!!!',
+  );
+  for (const id of ['RULE-25', 'RULE-26', 'RULE-27']) {
+    assert.equal(rules[id].wording_authority, 'AUTHORITATIVE');
+    assert.equal(rules[id].status, 'ACTIVE');
+    assert.ok(rules[id].verified_by.length > 0, `${id} records who verified it`);
+    assert.ok(rules[id].variant_wording.length > 0, `${id} keeps the wording it replaced`);
+  }
+});
+
+test('the restatement rules 25-27 replaced is kept, not discarded', () => {
+  const rules = Object.fromEntries(rulesFile().rules.map((rule) => [rule.id, rule]));
+  assert.match(rules['RULE-25'].variant_wording, /must ALWAYS remain tablet friendly/);
+  assert.notEqual(rules['RULE-25'].variant_wording, rules['RULE-25'].text);
+});
+
+test('rules 11-24 have no text, no invented wording and no false authority', () => {
+  const rules = rulesFile().rules;
+  for (let number = 11; number <= 24; number += 1) {
+    const rule = rules.find((entry) => entry.id === `RULE-${String(number).padStart(2, '0')}`);
+    assert.equal(rule.text, '', `RULE-${number} has text that nobody authorised`);
+    assert.equal(rule.status, 'SOURCE_MISSING');
+    assert.equal(rule.wording_authority, 'MISSING');
+    assert.equal(rule.variant_wording, '', `RULE-${number} has a variant nobody authorised either`);
+    assert.match(rule.note, /Searched at Phase 3A/);
+  }
+});
+
+test('rules 1-10 bind, but do not claim a wording they cannot prove', () => {
+  const rules = rulesFile().rules;
+  for (let number = 1; number <= 10; number += 1) {
+    const rule = rules.find((entry) => entry.id === `RULE-${String(number).padStart(2, '0')}`);
+    assert.equal(rule.status, 'ACTIVE', `RULE-${number} must stay in force`);
+    assert.equal(rule.wording_authority, 'RENDERING');
+    assert.ok(rule.text.length > 0);
+    assert.ok(rule.variant_wording.length > 0, `RULE-${number} keeps the other recorded version`);
+    assert.ok(rule.variant_source.includes('BD-06'), `RULE-${number} names where the variant came from`);
+  }
+});
+
+test('the development-authentication rule is superseded by rule 27, and kept', () => {
+  const rule = rulesFile().rules.find((entry) => entry.id === 'RULE-DEV-AUTH');
+  assert.equal(rule.status, 'SUPERSEDED');
+  assert.match(rule.note, /SUPERSEDED BY RULE-27/);
+  assert.ok(rule.text.length > 0, 'a superseded rule keeps its text');
+});
+
+test('a rule uses the rule vocabulary, and can never be marked done', () => {
+  // SUPERSEDED is a legitimate state for a rule AND for a task; everything else
+  // in the task lifecycle is not. A rule is never DONE, APPROVED or IMPLEMENTED
+  // — it is a standing constraint, not work somebody finishes.
+  const RULE_STATUSES = ['ACTIVE', 'SOURCE_MISSING', 'SUPERSEDED', 'RETIRED'];
+  const forbidden = statusModule.STATUSES.filter((status) => !RULE_STATUSES.includes(status));
+  for (const rule of rulesFile().rules) {
+    assert.ok(RULE_STATUSES.includes(rule.status), `${rule.id} has status ${rule.status}`);
+    assert.ok(!forbidden.includes(rule.status), `${rule.id} uses a task status (${rule.status})`);
+  }
+  assert.ok(forbidden.includes('DONE'), 'DONE must remain a task status a rule cannot hold');
 });

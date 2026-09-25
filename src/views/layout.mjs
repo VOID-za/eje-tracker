@@ -104,6 +104,10 @@ dl.kv dd { margin: 0; }
 .rule.missing { border-left-color: var(--bad); }
 .rule .n { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .rule p { margin: 0.2rem 0 0; white-space: pre-wrap; }
+/* A disclosure toggle is a touch target like any other. */
+summary { padding: 0.5rem 0; min-height: 44px; display: flex; align-items: center; }
+summary::marker { color: var(--muted); }
+details blockquote { color: var(--ink); }
 .notice { border: 1px solid #5c4a1f; background: #241d08; border-radius: var(--radius); padding: 0.8rem 1rem; margin-bottom: 1rem; }
 .notice.bad { border-color: #5c2b2b; background: #2b1010; }
 .login { max-width: 22rem; margin: 12vh auto; }

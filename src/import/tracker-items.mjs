@@ -14,7 +14,7 @@ import { recordHistory, saveItem } from '../repo/items.mjs';
 import { saveDecision } from '../repo/project.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-export const trackerItemsPath = join(here, '..', '..', 'data', 'tracker-items.json');
+const trackerItemsPath = join(here, '..', '..', 'data', 'tracker-items.json');
 
 export const importTrackerItems = async ({
   path = trackerItemsPath, actor = 'import:tracker', log = console.log, sql = db(),

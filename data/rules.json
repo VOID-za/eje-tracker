@@ -1,6 +1,6 @@
 {
   "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-  "note": "Verbatim. Nothing in this file is paraphrased, tidied or summarised. Rules 11–24 are recorded with empty text and status SOURCE_MISSING because their authoritative wording could not be recovered; they must be supplied by the project owner.",
+  "note": "Verbatim. Nothing in this file is paraphrased, tidied or summarised by the tracker. `wording_authority` says how good each wording is known to be: AUTHORITATIVE is the project owner's own words on record, RENDERING is a restatement whose exact wording is awaiting confirmation, MISSING is a rule whose wording could not be recovered from any source and was NOT invented.",
   "rules": [
     {
       "id": "RULE-01",
@@ -9,7 +9,13 @@
       "category": "Deployment",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 1"
+      "source_ref": "§7, rule 1",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Do NOT deploy anything to the VPS.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 1",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-02",
@@ -18,7 +24,13 @@
       "category": "Process",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 2"
+      "source_ref": "§7, rule 2",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Do NOT make application-code changes in this task.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 2",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-03",
@@ -27,7 +39,13 @@
       "category": "Process",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 3"
+      "source_ref": "§7, rule 3",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Do NOT change database schema/data.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 3",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-04",
@@ -36,7 +54,13 @@
       "category": "Process",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 4"
+      "source_ref": "§7, rule 4",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Do NOT silently decide business rules.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 4",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-05",
@@ -45,7 +69,13 @@
       "category": "Feature protection",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 5"
+      "source_ref": "§7, rule 5",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Do NOT add a workaround just to make tests pass.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 5",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-06",
@@ -54,7 +84,13 @@
       "category": "Clean code",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 6"
+      "source_ref": "§7, rule 6",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Do NOT remove existing functionality.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 6",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-07",
@@ -63,7 +99,13 @@
       "category": "Feature protection",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 7"
+      "source_ref": "§7, rule 7",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Do NOT leave duplicate/dead/obsolete code when implementation work eventually happens.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 7",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-08",
@@ -72,7 +114,13 @@
       "category": "Scope control",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 8"
+      "source_ref": "§7, rule 8",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "The existing working system must not be broken.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 8",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-09",
@@ -81,7 +129,13 @@
       "category": "Consistency",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 9"
+      "source_ref": "§7, rule 9",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "docs/SCOPE.md is the source of truth for recorded requirements and decisions.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 9",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-10",
@@ -90,7 +144,13 @@
       "category": "Clean code",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 10"
+      "source_ref": "§7, rule 10",
+      "wording_authority": "RENDERING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "Any future implementation must keep PostgreSQL, application logic, API, UI, seeds, documentation and tests consistent.",
+      "variant_source": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026, rule 10",
+      "note": "The rule is in force; its WORDING is not confirmed as the owner's own. The text on file comes from a restatement (\"The established rules include:\"), and the same restatement's rules 25-27 proved to differ materially from the authoritative wording supplied in Phase 3A. A second, task-scoped version of this rule exists and is kept beside it. Awaiting confirmation — see TRK-BD-02."
     },
     {
       "id": "RULE-11",
@@ -100,7 +160,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-12",
@@ -110,7 +175,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-13",
@@ -120,7 +190,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-14",
@@ -130,7 +205,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-15",
@@ -140,7 +220,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-16",
@@ -150,7 +235,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-17",
@@ -160,7 +250,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-18",
@@ -170,7 +265,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-19",
@@ -180,7 +280,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-20",
@@ -190,7 +295,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-21",
@@ -200,7 +310,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-22",
@@ -210,7 +325,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-23",
@@ -220,7 +340,12 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-24",
@@ -230,34 +355,57 @@
       "status": "SOURCE_MISSING",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, rules 11–24",
-      "note": "The authoritative wording for rules 11–24 was not found in the EJE repository or in any project source available to the tracker. It is recorded here as an explicit, countable gap. The tracker will not invent it."
+      "note": "Searched at Phase 3A: the eje-tracker repository and its history, the EJE repository working tree and every blob in all 91 commits, all EJE commit messages, docs/SCOPE.md and every other EJE document ever committed, and the complete project conversation including every pasted instruction. No wording for this rule exists in any of them. It is recorded as an explicit gap rather than invented — see TRK-BD-01.",
+      "wording_authority": "MISSING",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     },
     {
       "id": "RULE-25",
       "ordinal": 25,
-      "text": "The complete system must ALWAYS remain tablet friendly.",
+      "text": "The complete system should always but always stay Tablet friendly!!",
       "category": "Tablet",
       "status": "ACTIVE",
-      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 25"
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
+      "source_ref": "§2, rule 25",
+      "variant_wording": "The complete system must ALWAYS remain tablet friendly.",
+      "variant_source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026 §7 (a restatement, superseded by the wording below)",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "Project owner (EJE)",
+      "verified_at": "2026-09-25",
+      "note": ""
     },
     {
       "id": "RULE-26",
       "ordinal": 26,
-      "text": "The tracker must ALWAYS be followed and amended as development progresses.\n\nWhen a feature/task is:\n\n- implemented\n- tested\n- reviewed\n- approved\n\nit must immediately be marked DONE in the tracker.\n\nDo not leave completed work as OPEN merely because a later batch may contain related work.\n\nThis is specifically to prevent confusion and duplicate work.",
+      "text": "We must always but always follow and amend this tracker as we go. When i feature is finished and tested and approved, then that task must be marked done on the tracker instantly. Otherwise confusion and double work will become a problem.",
       "category": "Process",
       "status": "ACTIVE",
-      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 26"
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
+      "source_ref": "§2, rule 26",
+      "variant_wording": "The tracker must ALWAYS be followed and amended as development progresses.\n\nWhen a feature/task is:\n\n- implemented\n- tested\n- reviewed\n- approved\n\nit must immediately be marked DONE in the tracker.\n\nDo not leave completed work as OPEN merely because a later batch may contain related work.\n\nThis is specifically to prevent confusion and duplicate work.",
+      "variant_source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026 §7 (a restatement, superseded by the wording below)",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "Project owner (EJE)",
+      "verified_at": "2026-09-25",
+      "note": ""
     },
     {
       "id": "RULE-27",
       "ordinal": 27,
-      "text": "Security is extremely important from the beginning.\n\nThe system must:\n\n- use current strong security practices\n- be hardened\n- follow best-practice security architecture\n- accommodate improved/new security practices as the project evolves\n- avoid knowingly introducing insecure shortcuts",
+      "text": "Security is very very important from the start. we want the best of the best security models. It must always accommodate the newest and best security models. System must be hardened. Have the best of the best practices. For development phase, never touch the demo users and the way we change users to view the different roles and permissions. once development is done, we will remove that and have actual login pages with prime security etc!!!!!",
       "category": "Security",
       "status": "ACTIVE",
-      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, rule 27"
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
+      "source_ref": "§2, rule 27",
+      "variant_wording": "Security is extremely important from the beginning.\n\nThe system must:\n\n- use current strong security practices\n- be hardened\n- follow best-practice security architecture\n- accommodate improved/new security practices as the project evolves\n- avoid knowingly introducing insecure shortcuts",
+      "variant_source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026 §7 (a restatement, superseded by the wording below)",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "Project owner (EJE)",
+      "verified_at": "2026-09-25",
+      "note": ""
     },
     {
       "id": "DIR-00",
@@ -266,7 +414,13 @@
       "category": "EJE protection",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§0 ABSOLUTE EJE PROTECTION RULE"
+      "source_ref": "§0 ABSOLUTE EJE PROTECTION RULE",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-08",
@@ -275,7 +429,13 @@
       "category": "Clean code",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§8 CLEAN CODE / CLEAN SYSTEM RULE"
+      "source_ref": "§8 CLEAN CODE / CLEAN SYSTEM RULE",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-09",
@@ -284,7 +444,13 @@
       "category": "Feature protection",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§9 NO FEATURE REGRESSIONS"
+      "source_ref": "§9 NO FEATURE REGRESSIONS",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-10",
@@ -293,7 +459,13 @@
       "category": "Consistency",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§10 DATABASE / DATA CONSISTENCY"
+      "source_ref": "§10 DATABASE / DATA CONSISTENCY",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-11",
@@ -302,7 +474,13 @@
       "category": "Testing",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§11 TESTING / ACCEPTANCE"
+      "source_ref": "§11 TESTING / ACCEPTANCE",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-12",
@@ -311,7 +489,13 @@
       "category": "Tablet",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§12 TABLET-FIRST REQUIREMENT"
+      "source_ref": "§12 TABLET-FIRST REQUIREMENT",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-13",
@@ -320,7 +504,13 @@
       "category": "Scope control",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§13 SCOPE / REQUIREMENT CONTROL"
+      "source_ref": "§13 SCOPE / REQUIREMENT CONTROL",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-15",
@@ -329,7 +519,13 @@
       "category": "Status model",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§15 STATUS MODEL"
+      "source_ref": "§15 STATUS MODEL",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-16",
@@ -338,7 +534,13 @@
       "category": "Deployment",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§16 GIT / DEPLOYMENT STATUS"
+      "source_ref": "§16 GIT / DEPLOYMENT STATUS",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-28",
@@ -347,7 +549,13 @@
       "category": "Automation",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§28 AUTOMATION"
+      "source_ref": "§28 AUTOMATION",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-29",
@@ -356,7 +564,13 @@
       "category": "Security",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§29 SECURITY"
+      "source_ref": "§29 SECURITY",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-33",
@@ -365,7 +579,13 @@
       "category": "Testing",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§33 QUALITY GATE"
+      "source_ref": "§33 QUALITY GATE",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-34",
@@ -374,7 +594,13 @@
       "category": "Clean code",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§34 CLEANUP VERIFICATION"
+      "source_ref": "§34 CLEANUP VERIFICATION",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-35",
@@ -383,7 +609,13 @@
       "category": "Process",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§35 GIT"
+      "source_ref": "§35 GIT",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-36",
@@ -392,7 +624,13 @@
       "category": "Process",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§36 NO GUESSING / NO SILENT DECISIONS"
+      "source_ref": "§36 NO GUESSING / NO SILENT DECISIONS",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "DIR-37",
@@ -401,16 +639,33 @@
       "category": "Feature protection",
       "status": "ACTIVE",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§37 ABSOLUTE FEATURE-PROTECTION RULE"
+      "source_ref": "§37 ABSOLUTE FEATURE-PROTECTION RULE",
+      "wording_authority": "AUTHORITATIVE",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": "",
+      "note": ""
     },
     {
       "id": "RULE-DEV-AUTH",
       "ordinal": 28,
       "text": "IMPORTANT DEVELOPMENT AUTHENTICATION RULE:\n\nDuring development, DO NOT change the existing demo users or the mechanism used to switch between roles/permissions.\n\nThe existing development/demo role mechanism is intentional and must remain available for testing.\n\nAfter development is complete, production authentication will be implemented properly and the development/demo mechanism will be removed/replaced as part of the production-security phase.",
       "category": "Security",
-      "status": "ACTIVE",
+      "status": "SUPERSEDED",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
-      "source_ref": "§7, IMPORTANT DEVELOPMENT AUTHENTICATION RULE"
+      "source_ref": "§7, IMPORTANT DEVELOPMENT AUTHENTICATION RULE",
+      "wording_authority": "AUTHORITATIVE",
+      "note": "SUPERSEDED BY RULE-27, whose authoritative wording carries this instruction itself: \"For development phase, never touch the demo users and the way we change users to view the different roles and permissions.\" Kept, not deleted: it is how the rule was stated to the project before rule 27's own wording was recovered, and the constraint it describes is unchanged and still binding.",
+      "verified_by": "",
+      "verified_at": null,
+      "variant_wording": "",
+      "variant_source": ""
     }
-  ]
+  ],
+  "sources": {
+    "PHASE2": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
+    "PHASE3A": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
+    "BD06_PREAMBLE": "EJE project owner message — \"IMPORTANT PROJECT RULES\" preamble to the BD-06 investigation task, 25 September 2026"
+  }
 }

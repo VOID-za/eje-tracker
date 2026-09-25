@@ -31,7 +31,7 @@
       "kind": "Requirement",
       "title": "The Rules model",
       "status": "IN_PROGRESS",
-      "description": "Rules are stored verbatim with the source of each one named against it. Rules 1-10, 25, 26, 27 and the development authentication rule were recovered and imported exactly. Rules 11-24 could not be found in any authoritative source available to the tracker and are recorded with empty text and the status SOURCE_MISSING. This item stays open until the project owner supplies that wording.",
+      "description": "Rules are first-class constraints in their own table, never tasks: they have no DONE state and nothing in the tracker can close one. Each carries its number, its wording, its status, how authoritative that wording is, its source, its last verified state and its full history. Rules 25, 26 and 27 now hold the project owner's own words, supplied at Phase 3A, with the restatement they replaced kept in history. Rules 1-10 are in force but hold a restatement, pending confirmation (TRK-BD-02). Rules 11-24 remain unrecovered after an exhaustive Phase 3A search and are recorded as an explicit gap (TRK-BD-01).",
       "group_path": "TRACKER/Phase 2",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§7, §38.3",
@@ -247,7 +247,7 @@
       "kind": "Deployment",
       "title": "The tracker is deployed to the VPS",
       "status": "OPEN",
-      "description": "Not done, and not Claude's to do. A human runs docs/deployment.md. The first step is checking that 127.0.0.1:3100 is actually free with ss -ltnp; if it is occupied, stop and report it rather than choosing another port.",
+      "description": "Not done, and not Claude's to do. A human runs docs/deployment.md against VPS srv2000625. The project owner has confirmed with `sudo ss -ltnp | grep ':3100'` that nothing is listening on port 3100, so the intended bind address 127.0.0.1:3100 is free. Phase 3A prepares the deployment; it does not perform it, and nothing may be installed or started until the owner says so.",
       "group_path": "TRACKER/Phase 2",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§4, §6",
@@ -289,6 +289,29 @@
       "source_ref": "§28",
       "delivery": "NOT_STARTED",
       "priority": "LOW"
+    },
+    {
+      "id": "TRK-25",
+      "kind": "Security",
+      "title": "Rule provenance is recorded, not assumed",
+      "status": "DONE",
+      "description": "Every rule carries whether its wording is the owner's own words, somebody's restatement, or missing entirely. Migration 0001 added that, the last-verified state and the variant wording; the Rules page shows all of it. A rule whose wording changes keeps the text it replaced, in its history and beside it.",
+      "group_path": "TRACKER/Phase 3A",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
+      "source_ref": "§1, §3",
+      "delivery": "LOCAL",
+      "priority": "HIGH"
+    },
+    {
+      "id": "TRK-26",
+      "kind": "Deployment",
+      "title": "Port 3100 confirmed free on srv2000625",
+      "status": "DONE",
+      "description": "The project owner ran `sudo ss -ltnp | grep ':3100'` on the VPS and reported no process listening. Recorded as the owner's observation — the tracker has no shell access to that machine and did not verify it itself.",
+      "group_path": "TRACKER/Phase 3A",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
+      "source_ref": "preamble",
+      "delivery": "NOT_STARTED"
     }
   ],
   "decisions": [
@@ -305,6 +328,21 @@
       "priority": "HIGH",
       "question": "What is the authoritative wording of EJE project rules 11-24?",
       "options": "(a) Supply the wording from the authoritative project source, and re-import.\n(b) Confirm that no such rules exist, and renumber the series deliberately.\n(c) Write them afresh as a new, dated set of rules — which would be new rules, not a recovery.",
+      "blocks": "TRK-03"
+    },
+    {
+      "id": "TRK-BD-02",
+      "kind": "Decision",
+      "title": "Is the recorded wording of rules 1-10 the authoritative wording?",
+      "status": "DECISION_REQUIRED",
+      "description": "Two versions of rules 1-10 exist, both written by the project owner on 25 September 2026, and they differ. The tracker holds the first and keeps the second beside it rather than choosing.\n\nVersion A, which the tracker records, comes from the Phase 2 instruction §7 and is introduced as \"The established rules include:\" — wording such as \"Never deploy to the VPS unless deployment has explicitly been requested/approved.\"\n\nVersion B comes from the BD-06 task preamble, headed IMPORTANT PROJECT RULES — wording such as \"Do NOT deploy anything to the VPS.\" Its rule 2 says \"in this task\", so it reads as a task-scoped restatement rather than the standing register.\n\nNeither is demonstrably the original. The Phase 2 §7 list also carried rules 25-27, and the authoritative wording of those three, supplied at Phase 3A, differs materially from it — which is direct evidence that §7 is a restatement of the register rather than the register itself. The rules are therefore in force with their wording marked RENDERING until the owner confirms it.",
+      "group_path": "TRACKER/Phase 3A",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 3A: AUTHORITATIVE RULE RECOVERY + TRACKER DEPLOYMENT PREPARATION\", 25 September 2026",
+      "source_ref": "§1",
+      "delivery": "NOT_STARTED",
+      "priority": "HIGH",
+      "question": "Is the recorded wording of rules 1-10 the authoritative wording, or does the original exist elsewhere?",
+      "options": "(a) Confirm the recorded wording (Phase 2 §7) as authoritative, and mark rules 1-10 AUTHORITATIVE.\n(b) Supply the original wording from the authoritative project source, and re-import it verbatim.\n(c) Adopt the other recorded version (the BD-06 preamble) as authoritative instead.\n(d) Restate rules 1-10 afresh — which would be new rules with a new date, not a recovery.",
       "blocks": "TRK-03"
     }
   ]
