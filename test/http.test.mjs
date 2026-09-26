@@ -285,3 +285,73 @@ test('signing out ends the session at the server, not only in the browser', opti
     await stop();
   }
 });
+
+test('no page links to an address that does not exist', options, async () => {
+  const { base, stop } = await start();
+  const jar = cookieJar();
+  try {
+    const form = await fetch(`${base}/login`);
+    jar.take(form);
+    const csrf = csrfFrom(await form.text());
+    jar.take(await fetch(`${base}/login`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded', cookie: jar.header() },
+      body: new URLSearchParams({ csrf, email: 'tester@example.test', password: PASSWORD }),
+      redirect: 'manual',
+    }));
+
+    // Give the ledger a history entry of every entity type, because the dead
+    // links this test exists for were import and rule entries linked as items.
+    const { db } = await import('../src/db/client.mjs');
+    const sql = db();
+    await sql`INSERT INTO history (entity_type, entity_id, kind, summary)
+              VALUES ('import', 'docs/SCOPE.md', 'import', 'Imported'),
+                     ('rule', 'RULE-01', 'created', 'Recorded'),
+                     ('item', 'T-1', 'field', 'Changed')`;
+
+    const links = new Set();
+    for (const page of ['/', '/items', '/rules', '/decisions', '/releases', '/verification', '/history', '/items/T-1']) {
+      const response = await fetch(`${base}${page}`, { headers: { cookie: jar.header() } });
+      assert.equal(response.status, 200, `${page} did not render`);
+      const body = await response.text();
+      for (const match of body.matchAll(/href="([^"]+)"/g)) {
+        const [target] = match[1].split('#');
+        if (target.startsWith('/')) links.add(target || '/');
+      }
+    }
+    assert.ok(links.size > 5, 'the pages should link somewhere');
+
+    for (const link of links) {
+      const response = await fetch(`${base}${link}`, { headers: { cookie: jar.header() }, redirect: 'manual' });
+      assert.ok([200, 303].includes(response.status), `${link} answered ${response.status}`);
+    }
+  } finally {
+    await stop();
+  }
+});
+
+test('/commits goes to the page that shows them, rather than showing them twice', options, async () => {
+  const { base, stop } = await start();
+  const jar = cookieJar();
+  try {
+    const form = await fetch(`${base}/login`);
+    jar.take(form);
+    const csrf = csrfFrom(await form.text());
+    jar.take(await fetch(`${base}/login`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded', cookie: jar.header() },
+      body: new URLSearchParams({ csrf, email: 'tester@example.test', password: PASSWORD }),
+      redirect: 'manual',
+    }));
+    const response = await fetch(`${base}/commits`, { headers: { cookie: jar.header() }, redirect: 'manual' });
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get('location'), '/releases');
+
+    // And it is still behind the gate.
+    const unauth = await fetch(`${base}/commits`, { redirect: 'manual' });
+    assert.equal(unauth.status, 303);
+    assert.equal(unauth.headers.get('location'), '/login');
+  } finally {
+    await stop();
+  }
+});

@@ -150,7 +150,9 @@ export const historyPage = ({ entries }) => html`
             <td class="id">
               ${entry.entity_type === 'item'
                 ? html`<a href="/items/${entry.entity_id}">${entry.entity_id}</a>`
-                : html`${entry.entity_type}:${entry.entity_id}`}
+                : entry.entity_type === 'rule'
+                  ? html`<a href="/rules#${entry.entity_id}">${entry.entity_id}</a>`
+                  : html`<span class="muted">${entry.entity_type}:${entry.entity_id}</span>`}
             </td>
             <td>${entry.summary}${entry.detail ? html` <span class="muted">— ${entry.detail}</span>` : ''}</td>
           </tr>`,

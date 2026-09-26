@@ -193,8 +193,21 @@ export const importGit = async ({
     return null;
   };
 
+  // ITEMS THAT CARRY OTHER ITEMS ARE ROLLED UP, NOT COMPUTED TWICE.
+  //
+  // A change request usually names an implementing commit in its own dateline AND
+  // has requirement rows filed under it. Letting both rules write its delivery
+  // made the import fight itself — the commit pass said DEPLOYED, the roll-up
+  // said NOT_STARTED, and every run rewrote all four of them and filed two more
+  // history rows. The roll-up wins, because a batch is only as delivered as its
+  // weakest part, so the commit pass leaves parents alone.
+  const parents = new Set(
+    (await sql`SELECT DISTINCT to_id FROM relations WHERE kind = 'implements'`).map((row) => row.to_id),
+  );
+
   const byItem = new Map();
   for (const link of links) {
+    if (parents.has(link.item_id)) continue;
     const full = resolve(link.hash);
     if (full === null) continue;
     if (!byItem.has(link.item_id)) byItem.set(link.item_id, []);
@@ -242,7 +255,7 @@ export const importGit = async ({
      NOT_STARTED while every requirement under it was live; and counting only
      the parts that exist would let a half-built batch read as deployed. */
   const ORDER = ['NOT_STARTED', 'LOCAL', 'COMMITTED', 'PUSHED', 'DEPLOYED'];
-  const parents = await sql`
+  const rolledUp = await sql`
     SELECT r.to_id AS parent, min(array_position(${ORDER}::text[], i.delivery)) AS weakest
       FROM relations r JOIN items i ON i.id = r.from_id
      -- A row the scope marks DONE against work that predates the change
@@ -253,7 +266,7 @@ export const importGit = async ({
      WHERE r.kind = 'implements'
        AND (i.delivery <> 'NOT_STARTED' OR i.status NOT IN ('DONE', 'SUPERSEDED'))
      GROUP BY r.to_id`;
-  for (const row of parents) {
+  for (const row of rolledUp) {
     const delivery = ORDER[row.weakest - 1];
     const [item] = await sql`SELECT delivery FROM items WHERE id = ${row.parent}`;
     if (item === undefined || item.delivery === delivery) continue;

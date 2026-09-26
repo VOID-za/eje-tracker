@@ -246,8 +246,8 @@
       "id": "TRK-21",
       "kind": "Deployment",
       "title": "The tracker is deployed to the VPS",
-      "status": "OPEN",
-      "description": "Not done, and not Claude's to do. A human runs docs/deployment.md against VPS srv2000625. The project owner has confirmed with `sudo ss -ltnp | grep ':3100'` that nothing is listening on port 3100, so the intended bind address 127.0.0.1:3100 is free. Phase 3A prepares the deployment; it does not perform it, and nothing may be installed or started until the owner says so.",
+      "status": "BLOCKED",
+      "description": "BLOCKED ON ACCESS, NOT ON WORK. Phase 4 asked for the tracker to be deployed to srv2000625. This environment cannot reach that machine: ~/.ssh holds no keys, no ssh client is installed, outbound port 22 is refused by the container's network policy, and srv2000625 does not resolve. Only HTTPS egress works, which is how deployment evidence is read. Everything that does not need the VPS is done and verified locally; the runbook in docs/deployment.md carries the exact commands for the project owner to run, including the port re-check, the read-only import timer and the access options.",
       "group_path": "TRACKER/Phase 2",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§4, §6",
@@ -282,13 +282,13 @@
       "id": "TRK-24",
       "kind": "Improvement",
       "title": "Automation of tracker updates",
-      "status": "OPEN",
-      "description": "Designed for, deliberately not built: git hooks or a timer could run the importers, and deployment health could update deployment status. No automation may modify EJE production behaviour, deploy anything, or mutate the EJE database.",
+      "status": "DONE",
+      "description": "Prepared and safe: deploy/eje-tracker-import.service and .timer run npm run import:scope and npm run import:git four times a day plus once after boot, hardened like the main unit with the EJE checkout mounted read-only. The automation may read docs/SCOPE.md, git history and the live health endpoint; it may not deploy EJE, restart it, write into its repository, touch its database, bypass approval or mark anything DONE. Not installed — that is a VPS action.",
       "group_path": "TRACKER/Phase 2",
       "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 2: RULES + LIVE PROJECT TRACKER\", 25 September 2026",
       "source_ref": "§28",
-      "delivery": "NOT_STARTED",
-      "priority": "LOW"
+      "delivery": "LOCAL",
+      "priority": "NORMAL"
     },
     {
       "id": "TRK-25",
@@ -392,6 +392,53 @@
       "group_path": "TRACKER/Phase 3D",
       "source": "EJE project owner instruction — \"EJE PROJECT TRACKER — FINALIZE CONTROL LAYER AND PREPARE FOR EJE CONTINUATION\", 26 September 2026",
       "source_ref": "§2, §3",
+      "delivery": "LOCAL",
+      "priority": "NORMAL"
+    },
+    {
+      "id": "TRK-34",
+      "kind": "Requirement",
+      "title": "The shared control loop is documented and executable",
+      "status": "DONE",
+      "description": "docs/workflow.md records the loop the project owner asked for — human → ChatGPT → tracker → Claude → tracker — what Claude must read before EJE work and record after it, what DONE means, what is automatic and what is not, and the prompt preamble the owner can paste above any task. `npm run brief` prints the live state as one page (or --json), which is the read Claude performs and the text the owner pastes into ChatGPT.",
+      "group_path": "TRACKER/Phase 4",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 4: LIVE TRACKER DEPLOYMENT + SHARED PROJECT CONTROL WORKFLOW\", 26 September 2026",
+      "source_ref": "§12, §13, §14",
+      "delivery": "LOCAL",
+      "priority": "HIGH"
+    },
+    {
+      "id": "TRK-35",
+      "kind": "Documentation",
+      "title": "ChatGPT cannot reach the tracker directly, and that is documented",
+      "status": "DONE",
+      "description": "There is no ChatGPT → tracker integration and none was invented. ChatGPT cannot reach a service bound to 127.0.0.1:3100, and publishing the tracker to make it possible is a security decision the owner has not taken. The documented path needs no open port: the owner runs npm run brief and pastes one page, or reads the tracker over the SSH tunnel. The read-only JSON API serves anything that can reach the host.",
+      "group_path": "TRACKER/Phase 4",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 4: LIVE TRACKER DEPLOYMENT + SHARED PROJECT CONTROL WORKFLOW\", 26 September 2026",
+      "source_ref": "§14",
+      "delivery": "LOCAL"
+    },
+    {
+      "id": "TRK-36",
+      "kind": "Bug",
+      "title": "import:git rewrote four change requests on every run",
+      "status": "DONE",
+      "description": "Found by Phase 4's idempotency check, not by a test. A change request that names an implementing commit in its own dateline AND carries requirement rows was written twice per run: the commit pass said DEPLOYED, the roll-up said NOT_STARTED, and CR-01, CR-04, CR-07 and CR-09 oscillated forever, filing two history rows each every time. The roll-up now wins — a batch is only as delivered as its weakest part — and the commit pass skips any item that carries others. Second and third runs now report 0 delivery changes. Covered by a regression test that builds the exact shape and imports three times.",
+      "group_path": "TRACKER/Phase 4",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 4: LIVE TRACKER DEPLOYMENT + SHARED PROJECT CONTROL WORKFLOW\", 26 September 2026",
+      "source_ref": "§5",
+      "delivery": "LOCAL",
+      "priority": "HIGH"
+    },
+    {
+      "id": "TRK-37",
+      "kind": "Bug",
+      "title": "Four dead links on the dashboard activity list",
+      "status": "DONE",
+      "description": "The dashboard linked every history entry to /items/<id>, including rule and import events, which have no item page — /items/git, /items/rules, /items/docs/SCOPE.md and /items/tracker-items all 404'd. A rule entry now links to its rule, an import event is plain text, and a test walks every link on every page and asserts each one answers. /commits, which Phase 4 asked to verify, now redirects to /releases where commits are shown, rather than rendering the same table a second time.",
+      "group_path": "TRACKER/Phase 4",
+      "source": "EJE project owner instruction — \"EJE PROJECT CONTROL SYSTEM — PHASE 4: LIVE TRACKER DEPLOYMENT + SHARED PROJECT CONTROL WORKFLOW\", 26 September 2026",
+      "source_ref": "§9",
       "delivery": "LOCAL",
       "priority": "NORMAL"
     }

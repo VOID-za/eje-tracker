@@ -9,6 +9,23 @@
 import { html } from '../http/html.mjs';
 import { tag, when } from './layout.mjs';
 
+/**
+ * Where a history entry points.
+ *
+ * Only an ITEM has an item page. A rule belongs to the Rules page and an import
+ * event belongs to nothing — linking those to /items/<id> produced four dead
+ * links that looked exactly like working ones.
+ */
+const historyLink = (entry) => {
+  if (entry.entity_type === 'item') {
+    return html`<a href="/items/${entry.entity_id}" class="mono">${entry.entity_id}</a>`;
+  }
+  if (entry.entity_type === 'rule') {
+    return html`<a href="/rules#${entry.entity_id}" class="mono">${entry.entity_id}</a>`;
+  }
+  return html`<span class="mono muted">${entry.entity_type}:${entry.entity_id}</span>`;
+};
+
 const bar = (summary) => {
   const pct = (value) => (summary.all === 0 ? 0 : (value / summary.all) * 100);
   return html`<div class="bar" title="${summary.done} done · ${summary.built} built · ${summary.working} in progress · ${summary.stuck} stuck">
@@ -204,10 +221,7 @@ export const dashboardPage = ({
       ${recentHistory.map(
         (entry) => html`<li>
           <div class="when">${when(entry.at)} · ${entry.actor}</div>
-          <div>
-            <a href="/items/${entry.entity_id}" class="mono">${entry.entity_id}</a>
-            ${entry.summary}
-          </div>
+          <div>${historyLink(entry)} ${entry.summary}</div>
         </li>`,
       )}
     </ul>

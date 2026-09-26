@@ -45,6 +45,7 @@ node bin/user-add.mjs you@example.com "Your name"   # asks for a password, echo 
 npm run import:scope                                 # reads EJE_REPO_PATH/docs/SCOPE.md
 npm run import:git                                   # commits + deployment evidence
 npm start                                            # http://127.0.0.1:3100
+npm run brief                                        # the live state, as one page
 ```
 
 Requires Node 22 and PostgreSQL. One runtime dependency: `postgres`.
@@ -61,6 +62,9 @@ pure tests run anywhere. They share one database, so the suite runs serially.
 ## Documentation
 
 - [`docs/architecture.md`](docs/architecture.md) — how it is built and why.
+- [`docs/workflow.md`](docs/workflow.md) — the shared control loop: what Claude
+  must read before EJE work and record after it, what DONE means, and what is
+  automatic.
 - [`docs/rules.md`](docs/rules.md) — how the rules are held, what is
   authoritative, and what is missing.
 - [`docs/import.md`](docs/import.md) — exactly what the importers do, including

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { writeFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { describeDatabase, freshDatabase } from './helpers.mjs';
+import { describeDatabase, freshDatabase, testUrl } from './helpers.mjs';
 import { getItem, historyFor, listItems, saveItem, setStatus } from '../src/repo/items.mjs';
 import { saveRule, listRules } from '../src/repo/project.mjs';
 import { importScope } from '../src/import/scope.mjs';
@@ -439,6 +439,59 @@ test('both rule decisions are recorded as answered, with their questions kept', 
     assert.match(one.decision, /retained as SOURCE_MISSING rather than being reconstructed or invented/);
     const two = await getDecision('TRK-BD-02', sql);
     assert.match(two.decision, /Historical variants remain preserved/);
+  } finally {
+    await close();
+  }
+});
+
+test('the briefing reports the live state, and writes nothing', options, async () => {
+  const { sql, close } = await freshDatabase();
+  try {
+    // A state worth briefing on: work in every interesting condition.
+    await saveItem({ id: 'R-1', kind: 'Requirement', title: 'Finished and live',
+      status: 'DONE', delivery: 'DEPLOYED' }, {}, sql);
+    await saveItem({ id: 'R-2', kind: 'Requirement', title: 'Finished, not on the server',
+      status: 'DONE', delivery: 'PUSHED' }, {}, sql);
+    await saveItem({ id: 'R-3', kind: 'Requirement', title: 'Still a blocker',
+      status: 'OPEN', acceptance_blocker: true }, {}, sql);
+    await saveItem({ id: 'BD-99', kind: 'Decision', title: 'Unanswered question',
+      status: 'DECISION_REQUIRED' }, {}, sql);
+    await saveRule({ id: 'RULE-11', ordinal: 11, text: '', status: 'SOURCE_MISSING',
+      wording_authority: 'MISSING', source_type: 'NONE' }, {}, sql);
+
+    const before = await sql`SELECT count(*)::int AS n FROM history`;
+
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const run = promisify(execFile);
+    const { stdout } = await run('node', ['bin/brief.mjs'], {
+      env: { ...process.env, TRACKER_DATABASE_URL: testUrl },
+      cwd: new URL('..', import.meta.url).pathname,
+    });
+
+    // The brief is wrapped prose, so each claim is asserted on its own.
+    assert.match(stdout, /IMPLEMENTED is not TESTED/);
+    assert.match(stdout, /TESTED is\s+not APPROVED/);
+    assert.match(stdout, /APPROVED is DONE/);
+    assert.match(stdout, /PUSHED is not DEPLOYED/);
+    assert.match(stdout, /\*\*BD-99\*\* — Unanswered question/, 'an open decision must be briefed');
+    assert.match(stdout, /\*\*R-3\*\* \(OPEN\) — Still a blocker/, 'an acceptance blocker must be briefed');
+    assert.match(stdout, /finished in the ledger but their code is NOT on the server/);
+    assert.match(stdout, /RULE-11/, 'the missing rules must be named');
+    assert.match(stdout, /NOT to be\s+reconstructed, invented or renumbered/);
+
+    const after = await sql`SELECT count(*)::int AS n FROM history`;
+    assert.equal(after[0].n, before[0].n, 'the briefing wrote to the ledger');
+
+    const { stdout: asJson } = await run('node', ['bin/brief.mjs', '--json'], {
+      env: { ...process.env, TRACKER_DATABASE_URL: testUrl },
+      cwd: new URL('..', import.meta.url).pathname,
+    });
+    const payload = JSON.parse(asJson);
+    assert.equal(payload.openDecisions.length, 1);
+    assert.equal(payload.acceptanceBlockers.length, 1);
+    assert.equal(payload.doneNotDeployed, 1);
+    assert.deepEqual(payload.rules.sourceMissing, ['RULE-11']);
   } finally {
     await close();
   }

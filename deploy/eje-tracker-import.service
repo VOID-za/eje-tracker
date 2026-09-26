@@ -1,0 +1,50 @@
+# Keeps the tracker current. READ-ONLY against EJE.
+#
+# WHAT IT MAY DO: read docs/SCOPE.md and git history from the EJE checkout, ask
+# the live application for its build stamp over HTTPS, and write to the TRACKER's
+# own database.
+#
+# WHAT IT MAY NEVER DO: deploy EJE, restart it, write into its repository, touch
+# its database, or mark anything DONE. The imports are idempotent — a run that
+# finds nothing new writes nothing but its own import event.
+#
+# Install as /etc/systemd/system/eje-tracker-import.service
+
+[Unit]
+Description=EJE Project Tracker — import scope, rules and git state
+Documentation=https://github.com/VOID-za/eje-tracker/blob/main/docs/workflow.md
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=eje-tracker
+Group=eje-tracker
+WorkingDirectory=/srv/eje-tracker/app
+EnvironmentFile=/etc/eje-tracker/tracker.env
+ExecStart=/usr/bin/npm run import:scope
+ExecStart=/usr/bin/npm run import:git
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=eje-tracker-import
+
+# The same hardening as the service itself, and the EJE checkout stays read-only.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/srv/eje-tracker
+ReadOnlyPaths=/srv/eje/app

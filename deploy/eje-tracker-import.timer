@@ -1,0 +1,23 @@
+# Runs the read-only import four times a day, and once shortly after boot.
+#
+# Four times a day is deliberate. The importers are cheap and idempotent, but a
+# tracker that re-reads the world every minute invites somebody to treat it as a
+# live feed and stop recording things by hand — and the things worth recording by
+# hand are the ones no importer can see.
+#
+# Install as /etc/systemd/system/eje-tracker-import.timer, then:
+#   sudo systemctl enable --now eje-tracker-import.timer
+#   systemctl list-timers eje-tracker-import.timer
+
+[Unit]
+Description=Keep the EJE Project Tracker current (read-only imports)
+
+[Timer]
+OnBootSec=10min
+OnCalendar=*-*-* 06,11,16,21:20:00
+Persistent=true
+RandomizedDelaySec=5min
+Unit=eje-tracker-import.service
+
+[Install]
+WantedBy=timers.target

@@ -167,16 +167,60 @@ Both are read-only against `/srv/eje/app` and safe to repeat; the second run of
 the same document changes nothing. Re-run them after every EJE batch — or from
 a timer, once you are happy with what they do.
 
-## 9. Reaching it
-
-From your own machine:
+## 8a. Keep it current, automatically
 
 ```bash
-ssh -N -L 3100:127.0.0.1:3100 you@the-vps
+sudo cp /srv/eje-tracker/app/deploy/eje-tracker-import.service /etc/systemd/system/
+sudo cp /srv/eje-tracker/app/deploy/eje-tracker-import.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now eje-tracker-import.timer
+systemctl list-timers eje-tracker-import.timer
 ```
 
-Then open <http://127.0.0.1:3100>. The tunnel is the only way in: the tracker
-binds to loopback and Caddy has no route to it.
+Four read-only runs a day plus one after boot. The unit may read the EJE checkout
+and ask the live application for its build stamp; it may not deploy EJE, restart
+it, write into its repository or touch its database, and nothing it does can mark
+work DONE. Check a run with `journalctl -u eje-tracker-import -n 30`.
+
+*Undo:* `sudo systemctl disable --now eje-tracker-import.timer` and remove both unit files.
+
+## 9. Reaching it
+
+**Today: an SSH tunnel.** From your own machine:
+
+```bash
+ssh -N -L 3100:127.0.0.1:3100 you@srv2000625
+```
+
+Then open <http://127.0.0.1:3100> and leave it open beside whatever else you are
+working in. The tunnel is the only way in: the tracker binds to loopback and
+Caddy has no route to it.
+
+### If you want a URL instead — the three options, and the trap
+
+The EJE deployment **overwrites `/etc/caddy/Caddyfile`**. So the obvious move —
+adding a tracker site block to that file — would work until the next EJE deploy
+and then vanish. Worse, "fixing" that by teaching the EJE deployment about the
+tracker would make the tracker a part of EJE's deployment, which is the one thing
+this whole system is built not to be.
+
+| | Survives an EJE deploy? | What it needs from you |
+|---|---|---|
+| **1. Cloudflare Tunnel** (`cloudflared`, its own service) | **Yes** — it holds an outbound connection and touches no web-server config at all | a Cloudflare account, a tunnel token, a DNS name. **Credentials nobody but you should hold** |
+| **2. Caddy's own drop-in directory** | Yes, *if* EJE's deployment only rewrites `Caddyfile` and the main file already has `import /etc/caddy/conf.d/*.caddy` | one line added to the main Caddyfile once, by you, plus confirming the EJE deploy script leaves that line alone |
+| **3. SSH tunnel** | Not applicable — nothing is published | nothing. It works today |
+
+**Recommended:** stay on option 3 until you want the tracker on a phone or shared
+with somebody else, then go to option 1. A Cloudflare Tunnel is the only one of
+the three that cannot be destroyed by an EJE deployment and does not require
+touching Caddy at all.
+
+**This has not been set up.** Options 1 and 2 need credentials and DNS decisions
+that are yours, not mine: I will not guess a token, create a DNS record or edit a
+Caddyfile that the EJE deployment owns. When you want option 1, say so and you
+will get the exact `cloudflared` commands and a service unit to review.
+`deploy/Caddyfile.tracker.example` is the configuration for option 2 if you
+prefer it.
 
 ## Verifying it works
 

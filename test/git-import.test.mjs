@@ -87,3 +87,56 @@ test('an answer without a build stamp is not treated as one', async () => {
   assert.equal(failed.ok, false);
   assert.match(failed.reason, /answered 502/);
 });
+
+/* ------------------------------------------------- idempotency, end to end -- */
+
+import { describeDatabase, freshDatabase } from './helpers.mjs';
+import { importGit } from '../src/import/git.mjs';
+import { saveItem, relate } from '../src/repo/items.mjs';
+
+const dbOptions = describeDatabase === null ? {} : { skip: describeDatabase };
+
+test('importing git twice changes nothing the second time', dbOptions, async () => {
+  const { sql, close } = await freshDatabase();
+  const path = repo();
+  const { execFileSync } = await import('node:child_process');
+  const head = execFileSync('git', ['-C', path, 'rev-parse', 'HEAD']).toString().trim();
+  const health = async () => new Response(JSON.stringify({ build: { commit: head } }), { status: 200 });
+
+  try {
+    // A change request that names its own implementing commit AND carries a
+    // requirement row: the shape that used to make the importer fight itself,
+    // rewriting the same four items on every single run.
+    await saveItem({ id: 'CR-99', kind: 'Change Request', title: 'A batch' }, {}, sql);
+    await saveItem({ id: 'THING-1', kind: 'Requirement', title: 'Carried out', status: 'DONE' }, {}, sql);
+    await saveItem({ id: 'THING-2', kind: 'Requirement', title: 'Not built yet', status: 'OPEN' }, {}, sql);
+    await relate('THING-1', 'CR-99', 'implements', sql);
+    await relate('THING-2', 'CR-99', 'implements', sql);
+    for (const id of ['CR-99', 'THING-1']) {
+      await sql`INSERT INTO relations (from_type, from_id, to_type, to_id, kind)
+                VALUES ('item', ${id}, 'commit', ${head}, 'implemented_by')`;
+    }
+
+    const first = await importGit({ repo: path, log: () => {}, sql, fetchImpl: health });
+    assert.ok(first.changed > 0, 'the first run must establish the delivery state');
+
+    const second = await importGit({ repo: path, log: () => {}, sql, fetchImpl: health });
+    assert.equal(second.changed, 0, 'the second run changed delivery state again');
+    const third = await importGit({ repo: path, log: () => {}, sql, fetchImpl: health });
+    assert.equal(third.changed, 0, 'the third run changed delivery state again');
+
+    // No item may have been written twice — that is what oscillation looks like.
+    const churn = await sql`SELECT entity_id, count(*)::int AS n FROM history
+                             WHERE kind = 'delivery' GROUP BY 1 HAVING count(*) > 1`;
+    assert.equal(churn.length, 0, `these items oscillated: ${churn.map((row) => row.entity_id)}`);
+
+    // And the roll-up, not the commit, decides a batch's delivery: CR-99 is only
+    // as delivered as THING-2, which nobody has built.
+    const [batch] = await sql`SELECT delivery FROM items WHERE id = 'CR-99'`;
+    assert.equal(batch.delivery, 'NOT_STARTED');
+    const [carried] = await sql`SELECT delivery FROM items WHERE id = 'THING-1'`;
+    assert.equal(carried.delivery, 'DEPLOYED', 'a requirement with a live commit is deployed');
+  } finally {
+    await close();
+  }
+});

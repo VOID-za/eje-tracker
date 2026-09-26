@@ -285,6 +285,10 @@ export const routes = [
   { method: 'GET', path: '/rules', handler: rules },
   { method: 'GET', path: '/decisions', handler: decisions },
   { method: 'GET', path: '/releases', handler: releases },
+  // Commits are shown on /releases, beside the release state that gives them
+  // meaning. This is the address people reach for; it goes there rather than
+  // rendering the same table twice.
+  { method: 'GET', path: '/commits', handler: () => redirect('/releases') },
   { method: 'GET', path: '/verification', handler: verification },
   { method: 'GET', path: '/history', handler: activity },
 
