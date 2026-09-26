@@ -16,10 +16,18 @@ somebody's summary of the rule" are different claims:
 | `RENDERING` | in force, but the text on file is a restatement whose exact wording awaits confirmation |
 | `MISSING` | no wording could be recovered from any source, and none was invented |
 
+Each rule also records **what kind of source** it came from — `OWNER_MESSAGE`,
+`SCOPE_DOCUMENT`, `OWNER_RESTATEMENT`, `NONE` — and its date where one is known.
+The distinction matters: the owner writing a rule, the authoritative scope
+document stating it, and the owner restating rules that already existed are three
+different claims.
+
 Every other wording ever recorded for a rule is kept in `rule_variants`, which
-is append-only. A `HISTORICAL` variant is a wording the current one replaced; an
-`ALTERNATE` is another version recorded at the same time that nobody has
-resolved. Replacing a rule's text files the old text as a variant
+is append-only. A variant carries what kind of wording it is: `HISTORICAL` (one the current
+wording replaced), `ALTERNATE` (another version recorded at the same time,
+unresolved), `TASK_SCOPED` (written for one task rather than as a standing rule)
+or `DESCRIPTION` (somebody's account of what they believed was already
+recorded). Replacing a rule's text files the old text as a variant
 automatically, so an import cannot lose one.
 
 ## Rules 25, 26 and 27 — authoritative
@@ -38,50 +46,62 @@ separate `RULE-DEV-AUTH` entry is `SUPERSEDED` — kept, not deleted.
 
 ## Rules 1 to 10 — in force, wording unsettled
 
-**Three** versions are on record, all written by the project owner, none
-demonstrably the original:
+**Three** versions are on record, all written by the project owner. Each is now
+classified by how it introduces itself:
 
-- **A** — Phase 2 §7, *"The established rules include:"*. This is the recorded text.
-- **B** — the BD-06 task preamble, *"IMPORTANT PROJECT RULES"*, whose rule 2 says *"in this task"*.
-- **C** — Phase 3B §4, *"The known wording currently recorded includes the following principles"*, which differs from what is in fact recorded.
+| | Source | Classified as |
+|---|---|---|
+| **A** | Phase 2 §7, *"The established rules include:"* | the recorded text — register-framed, `OWNER_RESTATEMENT` |
+| **B** | the BD-06 task preamble, *"IMPORTANT PROJECT RULES"* | `TASK_SCOPED` — its own rule 2 says *"in this task"* |
+| **C** | Phase 3B §4, *"The known wording currently recorded includes…"* | `DESCRIPTION` — an account of what was believed to be recorded |
 
-Phase 3B instructed that the recorded wording be preserved rather than replaced,
-so A stays and B and C are kept as variants against each rule. The evidence that
-A is itself a restatement: A also carried rules 25–27, and the owner's
-authoritative wording for those three differs from A's version of them.
-**TRK-BD-02** asks which is authoritative.
+That settles what each version *is*. It does not settle whether A is the owner's
+original wording: A also carried rules 25–27, and the owner's authoritative
+wording for those three differs from A's version of them. So the rules bind, the
+wording stays `RENDERING`, and **TRK-BD-02** is the owner's to close.
 
-## Rules 11 to 24 — still missing, with candidates recorded
+(Rule 1 is the one case where C is character-identical to A, so nothing was
+filed as a separate version — recording it twice would invent a disagreement
+that does not exist.)
 
-Searched twice. At Phase 3B the search additionally separated the owner's own
-messages from machine-written conversation summaries, so that no summary could
-be mistaken for the owner's words:
+## Rules 11 to 24 — no wording exists, and the search is on the record
+
+**Three searches, fourteen recorded attempts**, each with its source, its method
+and its result. They are in the tracker, on the Rules page, so that a rule marked
+`MISSING` is an auditable conclusion rather than an absence — and so nobody runs
+the same search a fourth time. What was searched:
 
 - this repository and its complete history;
-- the EJE working tree, every blob in all 91 of its commits, every commit message;
+- the EJE working tree, **every blob** in all 91 of its commits, every commit message;
 - `docs/SCOPE.md` and every other EJE document ever committed;
-- all 124 owner-written messages, including every pasted instruction and queued command.
+- **every one of the 34 454 conversation records**, JSON-decoded, every string
+  walked — owner messages, assistant messages, tool results, attachments and
+  pasted instructions alike, with the owner's own messages separated from
+  machine-written summaries;
+- the environment outside both repositories;
+- **`EJE_Master_Scope_and_Audit_Baseline_v2.docx`** — the authoritative business
+  scope of record, which `docs/SCOPE.md` names as the authority and which had
+  never been opened.
 
-**No wording numbered 11–24 exists in any of them.**
+**No wording numbered 11–24 exists in any of them.** The scope document is
+decisive on the point: its own items 11–24 are *topic headings* — Checklists,
+Parts Delivery Note, Media and Technical Library — not rules, and it contains no
+rule register, no mention of "tracker" and no mention of "tablet friendly".
 
-What the second search did recover, verbatim, is fifteen standing rules in the
-owner's own words that carry no number:
+### What the searches did recover: 32 standing rules, verbatim
 
-- `PRIN-01` … `PRIN-14` — the fourteen **ARCHITECTURAL PRINCIPLES** of the
-  project's founding instruction (*"Reliability over shortcuts."* … *"Do not
-  build fake functionality that looks functional but is structurally impossible
-  to replace later."*);
-- `STAND-01` — the **MOST IMPORTANT RULE** of the CR-12 instruction (*"DO NOT
-  BREAK ANYTHING THAT ALREADY WORKS."*).
+| | Source | Count |
+|---|---|---|
+| `SCOPE-P01`…`SCOPE-P09` | the scope document's §2 *Product objective and principles* | 9 |
+| `SCOPE-D01`…`SCOPE-D08` | its §28 *Development control rule* | 8 |
+| `PRIN-01`…`PRIN-14` | the founding instruction's *ARCHITECTURAL PRINCIPLES* | 14 |
+| `STAND-01` | the CR-12 instruction's *MOST IMPORTANT RULE* | 1 |
 
-All fifteen are recorded as first-class rules and are in force.
-
-**There are exactly fourteen missing numbers and exactly fourteen architectural
-principles.** That is an observation, not a proof: the principles are numbered
-1–14 in their own source and nothing links them to the 11–24 range. Nothing has
-been renumbered on the strength of it. **TRK-BD-01** puts the question to the
-owner; one word settles it, and the mapping would then be applied with every
-existing record kept and the change written into each rule's history.
+All thirty-two are recorded as first-class rules and are in force. **None of them
+carries a number**, and none was renumbered into the gap: assigning a number to a
+rule on a resemblance — however good the arithmetic looks — is the fabrication
+the rules forbid. **TRK-BD-01** is the owner's to close, with four options
+including mapping named rules onto numbers or closing the gap by decision.
 
 ## Standing directives
 

@@ -106,7 +106,8 @@ The tracker's whole purpose is to be the place the project's rules are read
 from, so a deployment that carries a known-bad rule register is worse than no
 deployment. After the import in step 8, `/rules` will show fourteen rules (11–24) with no
 text, ten (1–10) whose wording is a restatement awaiting confirmation, and
-fifteen recovered standing rules whose number is unknown. That is deliberate and
+thirty-two recovered standing rules whose number is unknown, and a recovery
+record of the fourteen searches behind that conclusion. That is deliberate and
 is recorded as TRK-BD-01 and TRK-BD-02 — it is not something to fix on the
 server by typing wording in.
 
@@ -121,8 +122,10 @@ Running it twice is a no-op — it prints `migrations   up to date`. Migrations
 are additive and are applied one transaction each: `0000_initial.sql` builds the
 schema, `0001_rule_verification.sql` adds the rule-provenance columns, and
 `0002_rule_variants.sql` moves every recorded variant into its own append-only
-table before dropping the two columns it replaces. All three are safe against a
-database that already holds rules, and running them twice prints
+table before dropping the two columns it replaces, and
+`0003_rule_provenance.sql` adds each rule's source type and date, the variant
+kinds and the append-only recovery record. All four are safe against a database
+that already holds rules, and running them twice prints
 `migrations   up to date`.
 
 ## 6. The first account

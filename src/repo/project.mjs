@@ -21,7 +21,7 @@ const getRule = async (id, sql = db()) => {
 /** The fields a rule carries, and which are worth a history entry. */
 const RULE_FIELDS = [
   'text', 'category', 'status', 'note', 'source', 'source_ref', 'ordinal',
-  'wording_authority', 'verified_at', 'verified_by',
+  'wording_authority', 'verified_at', 'verified_by', 'source_type', 'source_date',
 ];
 
 /**
@@ -33,9 +33,16 @@ const RULE_FIELDS = [
  */
 const recordRuleVariant = async (ruleId, variant, sql = db()) => {
   if (!variant?.text) return;
-  await sql`INSERT INTO rule_variants (rule_id, text, source, kind)
-            VALUES (${ruleId}, ${variant.text}, ${variant.source ?? ''}, ${variant.kind ?? 'HISTORICAL'})
-            ON CONFLICT (rule_id, text) DO NOTHING`;
+  await sql`INSERT INTO rule_variants ${sql({
+    rule_id: ruleId,
+    text: variant.text,
+    source: variant.source ?? '',
+    kind: variant.kind ?? 'HISTORICAL',
+    source_type: variant.source_type ?? 'UNKNOWN',
+    source_date: variant.source_date ?? null,
+  })} ON CONFLICT (rule_id, text) DO UPDATE
+        SET kind = EXCLUDED.kind, source_type = EXCLUDED.source_type,
+            source_date = EXCLUDED.source_date`;
 };
 
 export const variantsFor = async (ruleId, sql = db()) =>
@@ -43,6 +50,28 @@ export const variantsFor = async (ruleId, sql = db()) =>
 
 export const allRuleVariants = async (sql = db()) =>
   sql`SELECT * FROM rule_variants ORDER BY rule_id, id`;
+
+/**
+ * The recovery record: every attempt to find a rule's authoritative wording.
+ *
+ * APPEND-ONLY, and keyed on what was searched rather than when, so re-running an
+ * import updates a result without filing the same search twice.
+ */
+export const recordRuleSearch = async (search, sql = db()) => {
+  await sql`INSERT INTO rule_searches ${sql({
+    scope: search.scope,
+    source: search.source,
+    method: search.method,
+    result: search.result,
+    found: search.found ?? false,
+    evidence: search.evidence ?? '',
+    searched_by: search.searched_by ?? '',
+  })} ON CONFLICT (scope, source, method) DO UPDATE
+        SET result = EXCLUDED.result, found = EXCLUDED.found, evidence = EXCLUDED.evidence`;
+};
+
+export const listRuleSearches = async (sql = db()) =>
+  sql`SELECT * FROM rule_searches ORDER BY id`;
 
 /**
  * Upserts a rule, VERBATIM.
@@ -68,6 +97,8 @@ export const saveRule = async (rule, { actor = 'system' } = {}, sql = db()) => {
       wording_authority: rule.wording_authority ?? 'RENDERING',
       verified_at: rule.verified_at ?? null,
       verified_by: rule.verified_by ?? '',
+      source_type: rule.source_type ?? 'UNKNOWN',
+      source_date: rule.source_date ?? null,
     })}`;
     for (const variant of rule.variants ?? []) await recordRuleVariant(rule.id, variant, sql);
     await recordHistory(

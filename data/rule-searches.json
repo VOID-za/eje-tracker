@@ -1,0 +1,131 @@
+{
+  "note": "The recovery record. Append-only: every attempt to find the authoritative wording of a rule, with what was searched, how, and what came back. It exists so that SOURCE_MISSING is an auditable conclusion rather than an assumption, and so that nobody has to run the same search twice.",
+  "searches": [
+    {
+      "scope": "RULE-11..24",
+      "source": "eje-tracker repository (working tree)",
+      "method": "grep of every tracked file for rule numbering and rule phrases",
+      "result": "No rule wording found. The repository contains only the tracker's own code and data.",
+      "found": false,
+      "searched_by": "Claude (Phase 3A)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "eje-tracker git history",
+      "method": "git log --all; every commit inspected",
+      "result": "Only the tracker's own commits exist; no imported rule material.",
+      "found": false,
+      "searched_by": "Claude (Phase 3A)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "EJE repository (working tree)",
+      "method": "git grep for \"rule\", rule numbering, \"project rules\", \"development rules\"",
+      "result": "No rules document exists anywhere in the EJE checkout.",
+      "found": false,
+      "searched_by": "Claude (Phase 3A)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "EJE git history — every blob",
+      "method": "git cat-file over all 1544 blobs under 400KB across all 91 commits, searched for rule phrases and for numbered rule-like lists reaching 11+",
+      "result": "Zero matches. No rules register has ever existed in the EJE repository.",
+      "found": false,
+      "searched_by": "Claude (Phase 3A)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "docs/SCOPE.md and every EJE document ever committed",
+      "method": "Read in full; searched for numbered rules and for rule headings",
+      "result": "Contains requirements, decisions, mandates and process rules PROC-1…PROC-5 — no rule register numbered 1-27.",
+      "found": false,
+      "searched_by": "Claude (Phase 3A)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "EJE commit messages",
+      "method": "git log --all --grep for rule-related terms",
+      "result": "Commit messages reference change IDs, never rule numbers.",
+      "found": false,
+      "searched_by": "Claude (Phase 3A)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "Project conversation — owner messages",
+      "method": "All 124 owner-written messages separated from 13 machine-written compaction summaries, then searched for rule headings and numbered lists",
+      "result": "Found rules 1-10 (twice, differing) and 25-27. Nothing numbered 11-24. Recovered instead: the founding instruction's 14 ARCHITECTURAL PRINCIPLES and the CR-12 instruction's MOST IMPORTANT RULE.",
+      "found": true,
+      "searched_by": "Claude (Phase 3B)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "Project conversation — pasted and queued instructions",
+      "method": "159 distinct queued_command payloads searched",
+      "result": "Task instructions only. No rule register.",
+      "found": false,
+      "searched_by": "Claude (Phase 3B)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "Project conversation — EVERY record, decoded",
+      "method": "All 34454 transcript records JSON-decoded and every string walked, searching for numbered lists that reach 11-24 with imperative wording",
+      "result": "Six such lists exist in the whole project history. Five are task requirement lists; the sixth is the founding ARCHITECTURAL PRINCIPLES, already recovered. No rules 11-24.",
+      "found": false,
+      "searched_by": "Claude (Phase 3C)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "Assistant messages and tool results",
+      "method": "Included in the full decoded scan above (every record type, not only user messages)",
+      "result": "No rule register. Nothing was read from a file that no longer exists.",
+      "found": false,
+      "searched_by": "Claude (Phase 3C)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "Environment outside both repositories",
+      "method": "Searched /root/.claude and /home/user for CLAUDE.md, AGENTS.md, memory and instruction files; grep for rule numbering",
+      "result": "Only the EJE repository's own CLAUDE.md/AGENTS.md, which point at the Next.js docs and carry no project rules.",
+      "found": false,
+      "searched_by": "Claude (Phase 3C)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-11..24",
+      "source": "EJE_Master_Scope_and_Audit_Baseline_v2.docx",
+      "method": "The uploaded authoritative business scope document, never previously opened. Extracted word/document.xml in full (354 paragraphs, 21812 characters) and searched every numbered item and heading",
+      "result": "DECISIVE: its items 11-24 are topic headings (Checklists, Parts Delivery Note, Media and Technical Library, …), not rules. The document contains no rule register, no mention of \"tracker\" and no mention of \"tablet friendly\", so it is not the source of rules 25-27 either. RECOVERED FROM IT: 17 standing rules, verbatim — §2 Product objective and principles (9) and §28 Development control rule (8).",
+      "found": true,
+      "searched_by": "Claude (Phase 3C)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-01..10",
+      "source": "Project conversation — all sources above",
+      "method": "Compared every recorded wording and classified each by how it introduces itself",
+      "result": "Three wordings exist. Phase 2 §7 is register-framed (\"The established rules include:\"); the BD-06 preamble is task-scoped (its rule 2 says \"in this task\"); Phase 3B §4 is a description (\"the known wording currently recorded\"). None is demonstrably the owner's verbatim original.",
+      "found": true,
+      "searched_by": "Claude (Phase 3C)",
+      "evidence": ""
+    },
+    {
+      "scope": "RULE-25..27",
+      "source": "Project conversation — owner messages",
+      "method": "Phase 3A and Phase 3B wordings compared character by character",
+      "result": "Rules 25 and 26 identical in both. Rule 27 differs by one word: \"accommodate\" (3A) against \"accomidate\" (3B, stated twice). The Phase 3B wording is recorded and the earlier one kept as a variant.",
+      "found": true,
+      "searched_by": "Claude (Phase 3C)",
+      "evidence": ""
+    }
+  ]
+}

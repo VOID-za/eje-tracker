@@ -324,3 +324,55 @@ test('re-importing the rules changes nothing and records nothing', options, asyn
     await close();
   }
 });
+
+test('migration 0003 records provenance and constrains it', options, async () => {
+  const { sql, close } = await freshDatabase();
+  try {
+    const columns = await sql`SELECT column_name FROM information_schema.columns WHERE table_name = 'rules'`;
+    const names = columns.map((row) => row.column_name);
+    for (const column of ['source_type', 'source_date', 'wording_authority']) {
+      assert.ok(names.includes(column), `${column} is missing`);
+    }
+    await saveRule({ id: 'RULE-01', ordinal: 1, text: 'x', source_type: 'SCOPE_DOCUMENT' }, {}, sql);
+    await assert.rejects(
+      () => sql`UPDATE rules SET source_type = 'HEARSAY' WHERE id = 'RULE-01'`,
+      /rules_source_type_known/,
+    );
+    await assert.rejects(
+      () => sql`INSERT INTO rule_variants (rule_id, text, kind) VALUES ('RULE-01', 'y', 'GUESSED')`,
+      /rule_variants_kind_known/,
+    );
+    // The kinds the evidence actually needs are all accepted.
+    for (const kind of ['HISTORICAL', 'ALTERNATE', 'TASK_SCOPED', 'DESCRIPTION']) {
+      await sql`INSERT INTO rule_variants (rule_id, text, kind) VALUES ('RULE-01', ${kind}, ${kind})`;
+    }
+  } finally {
+    await close();
+  }
+});
+
+test('the search record is append-only and never files a search twice', options, async () => {
+  const { sql, close } = await freshDatabase();
+  const { importRules } = await import('../src/import/rules.mjs');
+  const { listRuleSearches } = await import('../src/repo/project.mjs');
+  try {
+    await importRules({ log: () => {}, sql });
+    const first = await listRuleSearches(sql);
+    assert.ok(first.length >= 14, 'every recorded search must be imported');
+    assert.ok(first.some((search) => search.found === false), 'a search that found nothing is still recorded');
+    assert.ok(first.some((search) => search.found === true), 'a search that found something is marked so');
+
+    await importRules({ log: () => {}, sql });
+    const second = await listRuleSearches(sql);
+    assert.equal(second.length, first.length, 'a repeat import filed the same searches again');
+    assert.deepEqual(second.map((s) => s.id), first.map((s) => s.id), 'the record was rewritten, not kept');
+
+    // Every rule that has no wording must have a search behind it.
+    const missing = await sql`SELECT id FROM rules WHERE wording_authority = 'MISSING'`;
+    assert.ok(missing.length > 0);
+    const scopes = second.map((search) => search.scope);
+    assert.ok(scopes.includes('RULE-11..24'), 'the missing rules have no recorded search behind them');
+  } finally {
+    await close();
+  }
+});

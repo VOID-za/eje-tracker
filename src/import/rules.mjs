@@ -12,10 +12,11 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { db } from '../db/client.mjs';
 import { recordHistory } from '../repo/items.mjs';
-import { saveRule } from '../repo/project.mjs';
+import { recordRuleSearch, saveRule } from '../repo/project.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 export const rulesPath = join(here, '..', '..', 'data', 'rules.json');
+export const searchesPath = join(here, '..', '..', 'data', 'rule-searches.json');
 
 export const importRules = async ({
   path = rulesPath, actor = 'import:rules', log = console.log, sql = db(),
@@ -28,14 +29,23 @@ export const importRules = async ({
     if (result.created) created += 1;
     else if (result.changed.length > 0) updated += 1;
   }
+  // The record of the searches themselves, so that a missing rule is an
+  // auditable conclusion and not an assumption.
+  const searchFile = JSON.parse(readFileSync(searchesPath, 'utf8'));
+  for (const search of searchFile.searches) await recordRuleSearch(search, sql);
+
   const missing = file.rules.filter((rule) => rule.status === 'SOURCE_MISSING');
   const summary =
-    `Imported ${file.rules.length} rules (${created} new, ${updated} updated). ` +
+    `Imported ${file.rules.length} rules (${created} new, ${updated} updated), ` +
+    `${searchFile.searches.length} recorded recovery searches. ` +
     `${missing.length} recorded without text because their authoritative wording could not be recovered.`;
   await recordHistory(
     { entityType: 'import', entityId: 'rules', actor, kind: 'import', summary, detail: path },
     sql,
   );
   log(`import   ${summary}`);
-  return { rules: file.rules.length, created, updated, missing: missing.length };
+  return {
+    rules: file.rules.length, created, updated, missing: missing.length,
+    searches: searchFile.searches.length,
+  };
 };

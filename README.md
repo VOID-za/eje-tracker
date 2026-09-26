@@ -20,11 +20,12 @@ and is unaffected if it is stopped, upgraded or removed entirely.**
   `/api/health` build stamp and git ancestry, and the evidence is stored with
   it. Nobody can type "deployed" into this system.
 - **Nothing is invented, and nothing is renumbered on a hunch.** Rules 11–24
-  could not be recovered from any source, so they are recorded with empty text
-  and counted on the dashboard. Fifteen standing rules *were* recovered verbatim
-  from the owner's own instructions and are in force — but they carry no number
-  anyone can prove, so they are recorded as what they are rather than dropped
-  into the gap. Rules whose text is a restatement say so instead of passing as
+  could not be recovered from any source — and the fourteen searches that
+  establish that are themselves recorded, so the gap is an auditable finding
+  rather than an absence. Thirty-two standing rules *were* recovered verbatim,
+  from the owner's instructions and from the authoritative scope document, and
+  are in force — but they carry no number anyone can prove, so they are recorded
+  as what they are rather than dropped into the gap. Rules whose text is a restatement say so instead of passing as
   authoritative, and every wording a rule has ever been given is kept.
 - **Nothing is deleted.** History is append-only; an item that leaves
   `docs/SCOPE.md` is kept and marked, not removed.

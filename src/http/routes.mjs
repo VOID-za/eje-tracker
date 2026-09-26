@@ -20,7 +20,8 @@ import {
 } from '../repo/items.mjs';
 import {
   allRuleVariants, commitsFor, getDecision, latestDeployedRelease, listCommits,
-  listDecisions, listReleases, listRules, listVerifications, verificationsFor,
+  listDecisions, listReleases, listRuleSearches, listRules, listVerifications,
+  verificationsFor,
 } from '../repo/project.mjs';
 import {
   authenticate, createSession, destroySession, sessionCookie, clearedCookie,
@@ -152,6 +153,7 @@ const rules = async ({ user, csrf }) => {
   const sql = db();
   const all = await listRules(sql);
   const variants = await allRuleVariants(sql);
+  const searches = await listRuleSearches(sql);
   const history = await sql`SELECT * FROM history WHERE entity_type = 'rule' ORDER BY at`;
   const links = await sql`SELECT from_id, to_id FROM relations
                            WHERE from_type = 'rule' OR to_type = 'rule'`;
@@ -166,7 +168,8 @@ const rules = async ({ user, csrf }) => {
     const other = ruleId === link.from_id ? link.to_id : link.from_id;
     (related[ruleId] ??= []).push(other);
   }
-  return shell(user, '/rules', csrf, 'Rules', rulesPage({ rules: all, historyByRule, variantsByRule, related }));
+  return shell(user, '/rules', csrf, 'Rules',
+    rulesPage({ rules: all, historyByRule, variantsByRule, searches, related }));
 };
 
 const decisions = async ({ user, csrf }) =>
@@ -224,10 +227,15 @@ const apiItem = async ({ params }) => {
 
 const apiRules = async () => {
   const sql = db();
-  const [rules, variants] = await Promise.all([listRules(sql), allRuleVariants(sql)]);
+  const [rules, variants, searches] = await Promise.all([
+    listRules(sql), allRuleVariants(sql), listRuleSearches(sql),
+  ]);
   const byRule = {};
   for (const variant of variants) (byRule[variant.rule_id] ??= []).push(variant);
-  return json({ rules: rules.map((rule) => ({ ...rule, variants: byRule[rule.id] ?? [] })) });
+  return json({
+    rules: rules.map((rule) => ({ ...rule, variants: byRule[rule.id] ?? [] })),
+    recoverySearches: searches,
+  });
 };
 const apiDecisions = async () => json({ decisions: await listDecisions() });
 const apiReleases = async () => json({ releases: await listReleases(), commits: await listCommits(100) });

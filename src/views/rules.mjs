@@ -21,10 +21,27 @@ const AUTHORITY = {
   MISSING: ['no wording recovered from any source, and none invented', 'SOURCE_MISSING'],
 };
 
-export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, related }) => {
+const SOURCE_TYPE = {
+  OWNER_MESSAGE: "the project owner's own message",
+  SCOPE_DOCUMENT: 'the authoritative business scope document',
+  OWNER_RESTATEMENT: "the owner restating rules that already existed",
+  NONE: 'no source found',
+  UNKNOWN: 'source type not recorded',
+};
+
+const VARIANT_KIND = {
+  HISTORICAL: 'Superseded wording, kept',
+  ALTERNATE: 'Another version recorded at the same time',
+  TASK_SCOPED: 'Written for one task, not as a standing rule',
+  DESCRIPTION: 'A description of what was believed to be recorded',
+};
+
+export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, searches = [], related }) => {
   const numbered = rules.filter((rule) => /^RULE-\d+$/.test(rule.id));
   const directives = rules.filter((rule) => rule.id.startsWith('DIR-'));
-  const recovered = rules.filter((rule) => rule.id.startsWith('PRIN-') || rule.id.startsWith('STAND-'));
+  const recovered = rules.filter(
+    (rule) => rule.id.startsWith('PRIN-') || rule.id.startsWith('STAND-') || rule.id.startsWith('SCOPE-'),
+  );
   const other = rules.filter(
     (rule) => !numbered.includes(rule) && !directives.includes(rule) && !recovered.includes(rule),
   );
@@ -57,8 +74,7 @@ export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, related }
                   style="margin:0.5rem 0 0; padding-left:0.8rem; border-left:2px solid var(--line)">
                   ${paragraphs(variant.text)}
                   <div class="muted" style="font-size:0.78rem">
-                    ${variant.kind === 'ALTERNATE' ? 'Another version recorded at the same time' : 'Superseded wording, kept'}
-                    · ${variant.source}
+                    ${VARIANT_KIND[variant.kind] ?? variant.kind} · ${variant.source}
                   </div>
                 </blockquote>`,
               )}
@@ -66,6 +82,10 @@ export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, related }
           : ''}
         <div class="muted" style="font-size:0.78rem; margin-top:0.45rem">
           <div>Source: ${rule.source || '—'}${rule.source_ref ? html` · ${rule.source_ref}` : ''}</div>
+          <div>
+            Source type: ${SOURCE_TYPE[rule.source_type] ?? rule.source_type}
+            ${rule.source_date ? html` · dated ${when(rule.source_date)}` : ''}
+          </div>
           <div>
             Wording: ${authorityText} ·
             Last verified:
@@ -138,14 +158,43 @@ export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, related }
       ? html`<h2>Recovered standing rules, number unknown (${recovered.length})</h2>
           <div class="panel">
             <p class="muted" style="margin-top:0">
-              Rules stated by the project owner, in the owner's own words, that are in force but carry no
-              number the tracker can prove. Fourteen of them are the founding instruction's
-              <em>ARCHITECTURAL PRINCIPLES</em>, numbered 1–14 in their own source — and there are exactly
-              fourteen missing rule numbers, 11–24. That is an observation, not a proof, and nothing here has
-              been renumbered on the strength of it. The project owner is asked to confirm or deny the match in
-              <a href="/items/TRK-BD-01">TRK-BD-01</a>.
+              Standing rules recovered verbatim and in force, which carry no number the tracker can prove.
+              Seventeen come from the <strong>authoritative business scope document</strong> — nine product
+              principles (§2) and eight development-control rules (§28). Fourteen are the founding
+              instruction's <em>ARCHITECTURAL PRINCIPLES</em>, numbered 1–14 in their own source, and one is
+              the owner's <em>MOST IMPORTANT RULE</em>. There are fourteen missing rule numbers, 11–24;
+              nothing here has been renumbered into them, because no source links any of these rules to a
+              number. <a href="/items/TRK-BD-01">TRK-BD-01</a> puts that to the project owner.
             </p>
             ${recovered.map(card)}
+          </div>`
+      : ''}
+
+    ${searches.length > 0
+      ? html`<h2>The recovery record (${searches.length} searches)</h2>
+          <div class="panel">
+            <p class="muted" style="margin-top:0">
+              Every attempt to find a rule's authoritative wording, with what was searched, how, and what came
+              back. It is here so that a rule marked as missing is an auditable conclusion rather than an
+              assumption — and so nobody runs the same search a fourth time.
+            </p>
+            <table>
+              <thead><tr><th>Rules</th><th>Source searched</th><th>Method</th><th>Result</th><th>When</th></tr></thead>
+              <tbody>
+                ${searches.map(
+                  (search) => html`<tr>
+                    <td class="mono">${search.scope}</td>
+                    <td>${search.source}</td>
+                    <td class="muted">${search.method}</td>
+                    <td>
+                      ${search.found ? html`<span class="tag DONE">recovered</span> ` : html`<span class="tag OPEN">nothing</span> `}
+                      ${search.result}
+                    </td>
+                    <td>${when(search.searched_at)}</td>
+                  </tr>`,
+                )}
+              </tbody>
+            </table>
           </div>`
       : ''}
 

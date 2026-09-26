@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { parseScope, idsIn, hashesIn, plain } from '../src/import/markdown.mjs';
 import { readScope, readVerificationRuns } from '../src/import/scope.mjs';
-import { rulesPath } from '../src/import/rules.mjs';
+import { rulesPath, searchesPath } from '../src/import/rules.mjs';
 import * as statusModule from '../src/domain/model.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -207,7 +207,9 @@ test('rules 11-24 have no text, no invented wording and no false authority', () 
     assert.equal(rule.status, 'SOURCE_MISSING');
     assert.equal(rule.wording_authority, 'MISSING');
     assert.deepEqual(rule.variants, [], `RULE-${number} has a variant nobody authorised either`);
-    assert.match(rule.note, /Searched at Phase 3A/);
+    assert.match(rule.note, /No wording for this rule NUMBER exists in any accessible source/);
+    assert.match(rule.note, /recorded in the tracker with its method and result/,
+      'a missing rule must point at the search behind the conclusion');
   }
 });
 
@@ -244,4 +246,81 @@ test('a rule uses the rule vocabulary, and can never be marked done', () => {
     assert.ok(!forbidden.includes(rule.status), `${rule.id} uses a task status (${rule.status})`);
   }
   assert.ok(forbidden.includes('DONE'), 'DONE must remain a task status a rule cannot hold');
+});
+
+test('the authoritative scope document\'s rules are recovered verbatim', () => {
+  const rules = rulesFile().rules;
+  const fromDocument = rules.filter((rule) => rule.source_type === 'SCOPE_DOCUMENT');
+  assert.equal(fromDocument.length, 17, 'nine product principles and eight development-control rules');
+  const principles = rules.filter((rule) => /^SCOPE-P\d+$/.test(rule.id));
+  const control = rules.filter((rule) => /^SCOPE-D\d+$/.test(rule.id));
+  assert.equal(principles.length, 9);
+  assert.equal(control.length, 8);
+  assert.equal(
+    principles[0].text,
+    'Replace the paper/manual process with a centralised digital field-service system.',
+  );
+  assert.equal(control[0].text, 'Every feature/bugfix references requirement ID(s).');
+  for (const rule of fromDocument) {
+    assert.equal(rule.wording_authority, 'AUTHORITATIVE');
+    assert.equal(rule.source_date, '2026-09-24');
+    assert.match(rule.source, /Master_Scope_and_Audit_Baseline_v2\.docx/);
+    assert.match(rule.note, /IT CARRIES NO NUMBER/);
+  }
+});
+
+test('every rule records what kind of source it came from', () => {
+  const KNOWN = ['OWNER_MESSAGE', 'SCOPE_DOCUMENT', 'OWNER_RESTATEMENT', 'NONE', 'UNKNOWN'];
+  for (const rule of rulesFile().rules) {
+    assert.ok(KNOWN.includes(rule.source_type), `${rule.id} has source_type ${rule.source_type}`);
+    if (rule.wording_authority === 'MISSING') {
+      assert.equal(rule.source_type, 'NONE', `${rule.id} claims a source it does not have`);
+    } else {
+      assert.notEqual(rule.source_type, 'NONE', `${rule.id} has wording but no source type`);
+    }
+  }
+});
+
+test('the wordings of rules 1-10 are classified by the evidence', () => {
+  for (let number = 1; number <= 10; number += 1) {
+    const rule = rulesFile().rules.find((entry) => entry.id === `RULE-${String(number).padStart(2, '0')}`);
+    const kinds = rule.variants.map((variant) => variant.kind);
+    assert.ok(kinds.includes('TASK_SCOPED'), `RULE-${number}: the BD-06 version is task-scoped`);
+
+    // Rule 1 is the one case where the Phase 3B wording is character-identical
+    // to the recorded text, so there is nothing to file as a separate version —
+    // recording it twice would invent a disagreement that does not exist.
+    if (number === 1) {
+      assert.ok(!kinds.includes('DESCRIPTION'), 'an identical wording must not be filed as a variant');
+      assert.equal(rule.variants.length, 1);
+    } else {
+      assert.ok(kinds.includes('DESCRIPTION'), `RULE-${number}: the Phase 3B version describes what was recorded`);
+    }
+
+    // Classifying the versions is not the same as choosing between them.
+    assert.equal(rule.wording_authority, 'RENDERING');
+  }
+});
+
+test('the recovery record says what was searched, how, and what came back', () => {
+  const file = JSON.parse(readFileSync(searchesPath, 'utf8'));
+  assert.ok(file.searches.length >= 14, 'every search must be on the record');
+  for (const search of file.searches) {
+    for (const field of ['scope', 'source', 'method', 'result', 'searched_by']) {
+      assert.ok(search[field]?.length > 0, `a search is missing its ${field}`);
+    }
+    assert.equal(typeof search.found, 'boolean');
+  }
+  // The searches that mattered are marked as having found something.
+  const productive = file.searches.filter((search) => search.found);
+  assert.ok(productive.length >= 4);
+  assert.ok(
+    file.searches.some((search) => /docx/.test(search.source) && search.found),
+    'the scope document search must be recorded as productive',
+  );
+  // And the conclusion about 11-24 is recorded as a negative result, not absence.
+  assert.ok(
+    file.searches.filter((search) => search.scope === 'RULE-11..24' && !search.found).length >= 8,
+    'the searches that found nothing must be recorded too',
+  );
 });
