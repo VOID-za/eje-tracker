@@ -137,6 +137,14 @@ export const transitionRefusal = (from, to, kind = null) => {
 export const statusFromScope = (scopeStatus) => {
   const text = (scopeStatus ?? '').replace(/[*~`]/g, '').trim().toUpperCase();
   if (text.startsWith('DONE')) return 'DONE';
+  /*
+   * An audit FINDING is resolved, not done: nobody "completes" a defect. The
+   * scope's audit table says RESOLVED, and a word the scope actually uses must
+   * not fall through to OPEN — that would leave a closed acceptance blocker
+   * showing as an open one, which is the worst direction for this mapping to be
+   * wrong in.
+   */
+  if (text.startsWith('RESOLVED')) return 'DONE';
   if (text.startsWith('SUPERSEDED')) return 'SUPERSEDED';
   if (text.startsWith('DEFINED')) return 'PLANNED';
   if (text.startsWith('NOT IMPLEMENTED')) return 'OPEN';

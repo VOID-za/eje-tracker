@@ -34,6 +34,11 @@ test('every status can be reached from somewhere', () => {
 
 test("the scope's own words map onto the lifecycle without flattery", () => {
   assert.equal(statusFromScope('**DONE**'), 'DONE');
+  assert.equal(
+    statusFromScope('**RESOLVED 26 September 2026** `8479a69` — buildEmail now selects Graph'),
+    'DONE',
+    'a resolved audit finding is not an open acceptance blocker',
+  );
   assert.equal(statusFromScope('**NOT IMPLEMENTED**'), 'OPEN');
   assert.equal(statusFromScope('**DEFINED**'), 'PLANNED');
   assert.equal(statusFromScope('**SUPERSEDED by SUBMIT-1**'), 'SUPERSEDED');

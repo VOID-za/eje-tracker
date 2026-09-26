@@ -441,6 +441,18 @@
       "source_ref": "§9",
       "delivery": "LOCAL",
       "priority": "NORMAL"
+    },
+    {
+      "id": "TRK-38",
+      "kind": "Bug",
+      "title": "A resolved audit finding read as an open acceptance blocker",
+      "status": "IMPLEMENTED",
+      "description": "CR-09 Phase 1 closed AUD-1 in docs/SCOPE.md with the word the scope uses for a finding — RESOLVED, because nobody \"completes\" a defect. statusFromScope knew DONE, SUPERSEDED, DEFINED, NOT IMPLEMENTED, PARTIAL, UNVERIFIED, BLOCKED, FAIL and OPEN, and fell through everything else to OPEN. So the brief went on listing AUD-1 as an open acceptance blocker after the scope had answered it. RESOLVED now maps to DONE, with a test on the exact wording the scope carries. The default stays OPEN: nothing said is still nothing claimed.",
+      "group_path": "TRACKER/Phase 4",
+      "source": "Found while importing the EJE scope after CR-09 Phase 1, 26 September 2026",
+      "source_ref": "docs/SCOPE.md audit findings table",
+      "delivery": "LOCAL",
+      "priority": "NORMAL"
     }
   ],
   "decisions": [
