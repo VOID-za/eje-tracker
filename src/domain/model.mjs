@@ -145,6 +145,17 @@ export const statusFromScope = (scopeStatus) => {
    * wrong in.
    */
   if (text.startsWith('RESOLVED')) return 'DONE';
+  /*
+   * Tested is not approved, and the lifecycle already has a word for it.
+   *
+   * "Tests pass -> TESTING" is what `docs/workflow.md` says DONE requires
+   * before APPROVED, so a scope row that reports its tests as passing and its
+   * approval as outstanding belongs there. Mapping it to DONE would claim the
+   * owner's approval, which is the one thing the tracker cannot check and must
+   * never assume; leaving it to fall through to OPEN would throw away the
+   * implementation and the tests.
+   */
+  if (text.startsWith('TESTED')) return 'TESTING';
   if (text.startsWith('SUPERSEDED')) return 'SUPERSEDED';
   if (text.startsWith('DEFINED')) return 'PLANNED';
   if (text.startsWith('NOT IMPLEMENTED')) return 'OPEN';

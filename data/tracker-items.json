@@ -453,6 +453,18 @@
       "source_ref": "docs/SCOPE.md audit findings table",
       "delivery": "LOCAL",
       "priority": "NORMAL"
+    },
+    {
+      "id": "TRK-39",
+      "kind": "Bug",
+      "title": "A tested requirement awaiting approval read as untouched",
+      "status": "IMPLEMENTED",
+      "description": "IDEM-2 came back from the EJE work as \"TESTED — awaiting approval\", which is the honest state: implementation and tests are in, the owner's approval is not. statusFromScope had no branch for it, so it fell through to OPEN and the brief reported a requirement with 21 passing tests as untouched. TESTED now maps to TESTING, which is the step docs/workflow.md already puts between IMPLEMENTED and APPROVED. It deliberately does NOT map to DONE: that would claim the owner's approval, which is the one thing the tracker cannot check and the one claim it must never make on its own.",
+      "group_path": "TRACKER/Phase 4",
+      "source": "Found while importing the EJE scope after IDEM-2, 26 September 2026",
+      "source_ref": "docs/SCOPE.md outstanding requirements table",
+      "delivery": "LOCAL",
+      "priority": "NORMAL"
     }
   ],
   "decisions": [
