@@ -1,5 +1,24 @@
 # The project rules, and how the tracker holds them
 
+**Both rule decisions are closed.** On 26 September 2026 the project owner
+decided that the wording of rules 11–24 is unrecoverable and the numbers stay
+`SOURCE_MISSING` (TRK-BD-01), and that rules 1–10 remain active on the recorded
+rendering with their historical variants preserved (TRK-BD-02). The rule model
+below is final.
+
+## Five categories, never merged
+
+| Category | Count | What it is |
+|---|---|---|
+| Numbered project rules | 27 | `RULE-01`…`RULE-27`, the project's own numbering |
+| Scope / development principles | 17 | from the authoritative scope document, unnumbered |
+| Founding architectural principles | 15 | from the project's founding instruction, unnumbered |
+| Standing directives | 31 | mandatory sections of the owner's instructions, verbatim |
+| Superseded and historical | 1 | kept for the record; never current |
+
+Making the numbering *look* complete by moving an unnumbered rule into a missing
+number would cost the truth about where it came from. Historical truth wins.
+
 Rules are **permanent constraints**, not tasks. They live in their own table,
 they have no DONE state, and nothing in the tracker can close one. A rule
 changes only when a documented decision supersedes it, and every wording it has
@@ -57,8 +76,14 @@ classified by how it introduces itself:
 
 That settles what each version *is*. It does not settle whether A is the owner's
 original wording: A also carried rules 25–27, and the owner's authoritative
-wording for those three differs from A's version of them. So the rules bind, the
-wording stays `RENDERING`, and **TRK-BD-02** is the owner's to close.
+wording for those three differs from A's version of them.
+
+**DECIDED 26 September 2026 (TRK-BD-02):** *"Rules 1–10 remain active using the
+currently recorded rendering because no stronger recoverable original wording was
+found. Historical variants remain preserved and are not treated as separate
+current rules."* So the rules bind, the wording stays `RENDERING` — the tracker
+does not claim it is the owner's original — and the variants stay attached to the
+rule they are a version of.
 
 (Rule 1 is the one case where C is character-identical to A, so nothing was
 filed as a separate version — recording it twice would invent a disagreement
@@ -100,8 +125,14 @@ rule register, no mention of "tracker" and no mention of "tablet friendly".
 All thirty-two are recorded as first-class rules and are in force. **None of them
 carries a number**, and none was renumbered into the gap: assigning a number to a
 rule on a resemblance — however good the arithmetic looks — is the fabrication
-the rules forbid. **TRK-BD-01** is the owner's to close, with four options
-including mapping named rules onto numbers or closing the gap by decision.
+the rules forbid.
+
+**DECIDED 26 September 2026 (TRK-BD-01):** *"The original wording for Rules 11–24
+could not be recovered from the available project sources. The missing numbers are
+retained as SOURCE_MISSING rather than being reconstructed or invented. Recovered
+scope principles remain separately recorded under their actual
+source/provenance."* The question, its four options and the whole recovery record
+are kept — a closed decision keeps how it was decided.
 
 ## Standing directives
 

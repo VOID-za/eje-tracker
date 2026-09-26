@@ -12,6 +12,11 @@ authentication. It reads `docs/SCOPE.md` and `git log` from the EJE checkout and
 writes nothing there. **The EJE application has no runtime dependency on this
 and is unaffected if it is stopped, upgraded or removed entirely.**
 
+**Status:** the control layer is finalized. Rules 1–27 are settled (11–24 stay
+`SOURCE_MISSING` by decision, with the search behind it on record), 91 rules are
+recorded across five categories that are never merged, and the tracker is
+prepared for deployment to `srv2000625` — **not deployed**.
+
 ## What it insists on
 
 - **IMPLEMENTED is not DONE.** Done means finished, tested and accepted. The
@@ -71,7 +76,7 @@ pure tests run anywhere. They share one database, so the suite runs serially.
 | `/items` | Everything, filterable and searchable |
 | `/items/:id` | One item: where it came from, what it relates to, its commits, its files, its verification, its whole history |
 | `/rules` | Every project rule, verbatim, with how authoritative its wording is, when it was last verified, and the ones whose wording is missing |
-| `/decisions` | What nobody has decided yet, with the question and the options kept |
+| `/decisions` | What nobody has decided yet, and what was decided — with the question and the options kept either way |
 | `/releases` | Commits, releases, and where the code actually is |
 | `/verification` | What was run and what it said |
 | `/history` | Every change the tracker has recorded |

@@ -174,6 +174,9 @@ export const saveDecision = async (decision, sql = db()) => {
               blocks = EXCLUDED.blocks,
               decision = CASE WHEN EXCLUDED.decision = '' THEN decisions.decision ELSE EXCLUDED.decision END,
               decided_by = CASE WHEN EXCLUDED.decided_by = '' THEN decisions.decided_by ELSE EXCLUDED.decided_by END,
+              -- An answer, once recorded, is never blanked by a later import
+              -- that happens not to carry it.
+              decided_at = coalesce(EXCLUDED.decided_at, decisions.decided_at),
               implementation_status = EXCLUDED.implementation_status`;
 };
 

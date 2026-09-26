@@ -13,7 +13,7 @@ import { config } from '../config.mjs';
 import { db } from '../db/client.mjs';
 import { toString } from './html.mjs';
 import {
-  COOKIE, clearedCookie, csrfTokenFor, csrfValid, readCookie, userForToken,
+  COOKIE, csrfTokenFor, csrfValid, readCookie, userForToken,
 } from '../auth/sessions.mjs';
 
 /**

@@ -91,15 +91,35 @@ const FORWARD = {
   SUPERSEDED: ['OPEN'],
 };
 
-export const canTransition = (from, to) => {
+/**
+ * The one kind-specific edge: a DECISION that has been answered is finished.
+ *
+ * For every other kind, DECISION_REQUIRED → DONE is exactly the jump this
+ * tracker exists to refuse — work cannot become done while it is still waiting
+ * on somebody. But a decision record IS the deliverable: once the project owner
+ * has answered the question and the answer is recorded, there is no
+ * implementation left for the decision itself to pass through. Whatever the
+ * answer obliges anybody to BUILD is a separate item with its own lifecycle.
+ */
+const DECIDED = { Decision: { DECISION_REQUIRED: ['DONE'] } };
+
+export const canTransition = (from, to, kind = null) => {
   if (from === to) return true;
   if (!STATUSES.includes(to)) return false;
-  return (FORWARD[from] ?? []).includes(to);
+  if ((FORWARD[from] ?? []).includes(to)) return true;
+  return (DECIDED[kind]?.[from] ?? []).includes(to);
 };
 
-export const transitionRefusal = (from, to) => {
-  if (canTransition(from, to)) return null;
+export const transitionRefusal = (from, to, kind = null) => {
+  if (canTransition(from, to, kind)) return null;
   if (!STATUSES.includes(to)) return `${to} is not a status this tracker knows.`;
+  if (from === 'DECISION_REQUIRED' && to === 'DONE') {
+    return (
+      `${from} → ${to} is only allowed for an item of kind Decision, where the recorded answer is the ` +
+      `whole deliverable. This item is a ${kind ?? 'item'}: answering the question it waits on does not ` +
+      `build it.`
+    );
+  }
   return (
     `${from} → ${to} is not a move this tracker allows. ` +
     `A ledger that lets work jump straight to DONE is a ledger nobody can trust.`

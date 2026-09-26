@@ -376,3 +376,70 @@ test('the search record is append-only and never files a search twice', options,
     await close();
   }
 });
+
+test('an answered decision can be closed, and the answer is kept with it', options, async () => {
+  const { sql, close } = await freshDatabase();
+  const { saveDecision, getDecision } = await import('../src/repo/project.mjs');
+  try {
+    await saveItem({ id: 'BD-99', kind: 'Decision', title: 'Should the thing exist?',
+      status: 'DECISION_REQUIRED' }, {}, sql);
+    await saveDecision({ id: 'BD-99', question: 'Should the thing exist?', options: '(a) yes (b) no' }, sql);
+
+    const closed = await setStatus('BD-99', 'DONE', { actor: 'owner', note: 'answered' }, sql);
+    assert.equal(closed.status, 'DONE');
+
+    await saveDecision({
+      id: 'BD-99', question: 'Should the thing exist?', options: '(a) yes (b) no',
+      decision: 'No, it should not.', decided_by: 'Project owner (EJE)', decided_at: '2026-09-26',
+    }, sql);
+    const record = await getDecision('BD-99', sql);
+    assert.equal(record.decision, 'No, it should not.');
+    assert.equal(record.options, '(a) yes (b) no', 'the options are kept after the answer');
+    assert.ok(record.decided_at instanceof Date);
+
+    // A later import that carries no answer must not blank the one on record.
+    await saveDecision({ id: 'BD-99', question: 'Should the thing exist?', options: '(a) yes (b) no' }, sql);
+    const after = await getDecision('BD-99', sql);
+    assert.equal(after.decision, 'No, it should not.');
+    assert.ok(after.decided_at instanceof Date, 'the decision date was blanked by a later import');
+  } finally {
+    await close();
+  }
+});
+
+test('ordinary work waiting on a decision still cannot be closed', options, async () => {
+  const { sql, close } = await freshDatabase();
+  try {
+    await saveItem({ id: 'REQ-1', kind: 'Requirement', title: 'Needs a decision first',
+      status: 'DECISION_REQUIRED' }, {}, sql);
+    await assert.rejects(
+      () => setStatus('REQ-1', 'DONE', { actor: 'tester' }, sql),
+      /only allowed for an item of kind Decision/,
+    );
+  } finally {
+    await close();
+  }
+});
+
+test('both rule decisions are recorded as answered, with their questions kept', options, async () => {
+  const { sql, close } = await freshDatabase();
+  const { importTrackerItems } = await import('../src/import/tracker-items.mjs');
+  const { getDecision } = await import('../src/repo/project.mjs');
+  try {
+    await importTrackerItems({ log: () => {}, sql });
+    for (const id of ['TRK-BD-01', 'TRK-BD-02']) {
+      const record = await getDecision(id, sql);
+      assert.equal(record.status, 'DONE', `${id} must be closed`);
+      assert.ok(record.decision.length > 0, `${id} must record the answer`);
+      assert.equal(record.decided_by, 'Project owner (EJE)');
+      assert.ok(record.question.length > 0, `${id} must keep the question it asked`);
+      assert.ok(record.options.length > 0, `${id} must keep the options it offered`);
+    }
+    const one = await getDecision('TRK-BD-01', sql);
+    assert.match(one.decision, /retained as SOURCE_MISSING rather than being reconstructed or invented/);
+    const two = await getDecision('TRK-BD-02', sql);
+    assert.match(two.decision, /Historical variants remain preserved/);
+  } finally {
+    await close();
+  }
+});

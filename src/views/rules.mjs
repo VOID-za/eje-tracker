@@ -37,13 +37,15 @@ const VARIANT_KIND = {
 };
 
 export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, searches = [], related }) => {
+  // FIVE CATEGORIES, KEPT APART. Merging them would make the numbering look
+  // complete at the cost of the truth about where each rule came from, and the
+  // project owner's instruction is explicit that historical truth wins.
   const numbered = rules.filter((rule) => /^RULE-\d+$/.test(rule.id));
+  const scopeRules = rules.filter((rule) => rule.id.startsWith('SCOPE-'));
+  const founding = rules.filter((rule) => rule.id.startsWith('PRIN-') || rule.id.startsWith('STAND-'));
   const directives = rules.filter((rule) => rule.id.startsWith('DIR-'));
-  const recovered = rules.filter(
-    (rule) => rule.id.startsWith('PRIN-') || rule.id.startsWith('STAND-') || rule.id.startsWith('SCOPE-'),
-  );
-  const other = rules.filter(
-    (rule) => !numbered.includes(rule) && !directives.includes(rule) && !recovered.includes(rule),
+  const historical = rules.filter(
+    (rule) => ![...numbered, ...scopeRules, ...founding, ...directives].includes(rule),
   );
   const missing = numbered.filter((rule) => rule.wording_authority === 'MISSING');
   const rendering = numbered.filter((rule) => rule.wording_authority === 'RENDERING');
@@ -128,6 +130,29 @@ export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, searches 
       and every such change is kept in its history with the wording it replaced.
     </p>
 
+    <div class="panel">
+      <h3 style="margin-top:0">What is on this page</h3>
+      <table>
+        <thead><tr><th>Category</th><th>Count</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td>Numbered project rules</td><td>${numbered.length}</td>
+              <td>RULE-01…RULE-27, the project's own numbering</td></tr>
+          <tr><td>Scope / development principles</td><td>${scopeRules.length}</td>
+              <td>from the authoritative scope document, unnumbered</td></tr>
+          <tr><td>Founding architectural principles</td><td>${founding.length}</td>
+              <td>from the project's founding instruction, unnumbered</td></tr>
+          <tr><td>Standing directives</td><td>${directives.length}</td>
+              <td>mandatory sections of the owner's instructions, verbatim</td></tr>
+          <tr><td>Superseded and historical</td><td>${historical.length}</td>
+              <td>kept for the record; never current</td></tr>
+        </tbody>
+      </table>
+      <p class="muted" style="margin-bottom:0">
+        These categories are never merged. Making the numbering look complete by moving an unnumbered rule
+        into a missing number would cost the truth about where it came from.
+      </p>
+    </div>
+
     ${missing.length > 0
       ? html`<div class="notice bad">
           <strong>${missing.length} rules are recorded without their text: ${missing[0].id.replace('RULE-', 'rule ')}–${missing[missing.length - 1].id.replace('RULE-', '')}.</strong>
@@ -154,19 +179,30 @@ export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, searches 
     <h2>The numbered project rules (${numbered.length})</h2>
     <div class="panel">${numbered.map(card)}</div>
 
-    ${recovered.length > 0
-      ? html`<h2>Recovered standing rules, number unknown (${recovered.length})</h2>
+    ${scopeRules.length > 0
+      ? html`<h2>Scope and development principles, from the scope of record (${scopeRules.length})</h2>
           <div class="panel">
             <p class="muted" style="margin-top:0">
-              Standing rules recovered verbatim and in force, which carry no number the tracker can prove.
-              Seventeen come from the <strong>authoritative business scope document</strong> — nine product
-              principles (§2) and eight development-control rules (§28). Fourteen are the founding
-              instruction's <em>ARCHITECTURAL PRINCIPLES</em>, numbered 1–14 in their own source, and one is
-              the owner's <em>MOST IMPORTANT RULE</em>. There are fourteen missing rule numbers, 11–24;
-              nothing here has been renumbered into them, because no source links any of these rules to a
-              number. <a href="/items/TRK-BD-01">TRK-BD-01</a> puts that to the project owner.
+              Recovered verbatim from <span class="mono">EJE_Master_Scope_and_Audit_Baseline_v2.docx</span>,
+              the authoritative business scope document — nine product principles (§2) and eight
+              development-control rules (§28). They are in force and they carry no number: the document's own
+              items 11–24 are topic headings, not rules. They are <strong>not</strong> renumbered into the
+              11–24 gap, by the project owner's decision of 26 September 2026
+              (<a href="/items/TRK-BD-01">TRK-BD-01</a>).
             </p>
-            ${recovered.map(card)}
+            ${scopeRules.map(card)}
+          </div>`
+      : ''}
+
+    ${founding.length > 0
+      ? html`<h2>Founding architectural principles (${founding.length})</h2>
+          <div class="panel">
+            <p class="muted" style="margin-top:0">
+              The fourteen <em>ARCHITECTURAL PRINCIPLES</em> of the project's founding instruction, numbered
+              1–14 in their own source, and the owner's <em>MOST IMPORTANT RULE</em>. In force, in the owner's
+              own words, and deliberately not mapped onto the missing rule numbers.
+            </p>
+            ${founding.map(card)}
           </div>`
       : ''}
 
@@ -198,13 +234,15 @@ export const rulesPage = ({ rules, historyByRule, variantsByRule = {}, searches 
           </div>`
       : ''}
 
-    ${other.length > 0
-      ? html`<h2>Superseded and retired (${other.length})</h2>
+    ${historical.length > 0
+      ? html`<h2>Superseded and historical (${historical.length})</h2>
           <div class="panel">
             <p class="muted" style="margin-top:0">
               Kept, never deleted. A superseded rule is part of how the project came to be bound as it is.
+              Task-scoped and descriptive wordings are not here — they stay attached to the rule they are a
+              version of, so they can never be mistaken for rules of their own.
             </p>
-            ${other.map(card)}
+            ${historical.map(card)}
           </div>`
       : ''}
 

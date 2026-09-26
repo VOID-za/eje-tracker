@@ -6,7 +6,7 @@
  * item quietly even by forgetting.
  */
 import { db } from '../db/client.mjs';
-import { canTransition, transitionRefusal } from '../domain/model.mjs';
+import { transitionRefusal } from '../domain/model.mjs';
 
 /** The fields an update may change, and which are worth a history entry. */
 const TRACKED = [
@@ -158,9 +158,9 @@ export const saveItem = async (item, { actor = 'system', evidence = '' } = {}, s
 export const setStatus = async (id, status, { actor, note = '', evidence = '' } = {}, sql = db()) => {
   const item = await getItem(id, sql);
   if (item === null) throw new Error(`${id} is not in the tracker.`);
-  const refusal = transitionRefusal(item.status, status);
+  // The item's own kind decides whether an answered decision may close.
+  const refusal = transitionRefusal(item.status, status, item.kind);
   if (refusal !== null) throw new Error(refusal);
-  if (!canTransition(item.status, status)) throw new Error(refusal ?? 'refused');
 
   const patch = { status, updated_at: new Date() };
   if (status === 'DONE') patch.completed_at = new Date();

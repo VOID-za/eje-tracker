@@ -54,3 +54,23 @@ test('percent complete counts DONE and nothing else', () => {
   assert.equal(summary.stuck, 2);
   assert.equal(summary.pushedNotDeployed, 4, 'pushed is never counted as deployed');
 });
+
+test('a decision closes when it is answered; other work still cannot', () => {
+  // The recorded answer IS a decision's deliverable, so it may close.
+  assert.equal(canTransition('DECISION_REQUIRED', 'DONE', 'Decision'), true);
+  assert.equal(transitionRefusal('DECISION_REQUIRED', 'DONE', 'Decision'), null);
+
+  // For anything else this is the jump the tracker exists to refuse.
+  for (const kind of ['Requirement', 'Change Request', 'Bug', 'Security', null]) {
+    assert.equal(canTransition('DECISION_REQUIRED', 'DONE', kind), false, `${kind} must not close this way`);
+    assert.match(
+      transitionRefusal('DECISION_REQUIRED', 'DONE', kind),
+      /only allowed for an item of kind Decision/,
+    );
+  }
+
+  // And the edge is narrow: it does not open any other shortcut for decisions.
+  assert.equal(canTransition('OPEN', 'DONE', 'Decision'), false);
+  assert.equal(canTransition('BLOCKED', 'DONE', 'Decision'), false);
+  assert.equal(canTransition('IMPLEMENTED', 'DONE', 'Decision'), false);
+});

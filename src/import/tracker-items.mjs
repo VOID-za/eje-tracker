@@ -23,12 +23,20 @@ export const importTrackerItems = async ({
   let created = 0;
   let updated = 0;
   for (const item of [...file.items, ...file.decisions]) {
-    const { question, options, blocks, ...fields } = item;
+    const {
+      question, options, blocks, decision, decided_by, decided_at, implementation_status, ...fields
+    } = item;
     const result = await saveItem(fields, { actor, evidence: path }, sql);
     if (result.created) created += 1;
     else if (result.changed.length > 0) updated += 1;
     if (question !== undefined) {
-      await saveDecision({ id: item.id, question, options: options ?? '', blocks: blocks ?? '' }, sql);
+      // The answer, who gave it and when — kept beside the question and the
+      // options it was chosen from, never instead of them.
+      await saveDecision({
+        id: item.id, question, options: options ?? '', blocks: blocks ?? '',
+        decision: decision ?? '', decided_by: decided_by ?? '', decided_at: decided_at ?? null,
+        implementation_status: implementation_status ?? '',
+      }, sql);
     }
   }
   const summary =

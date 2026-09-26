@@ -22,7 +22,10 @@ are separate columns**.
 - `delivery` — how far the *code* has got: NOT_STARTED, LOCAL, COMMITTED,
   PUSHED, DEPLOYED.
 
-IMPLEMENTED is not DONE — DONE means finished, tested and accepted. PUSHED is
+IMPLEMENTED is not DONE — DONE means finished, tested and accepted. The one
+exception is an item of kind **Decision**, where the recorded answer IS the
+deliverable: such an item may close straight from DECISION_REQUIRED, and for
+every other kind that move is refused with a refusal that says why. PUSHED is
 not DEPLOYED — the dashboard's headline percentage counts DONE only, and the
 "not deployed" card counts work that is finished in the ledger but is not on the
 server. Collapsing either pair would make the tracker agree with everybody and
